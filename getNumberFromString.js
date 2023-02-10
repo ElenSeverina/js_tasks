@@ -17,9 +17,9 @@ function getNumberFromString(str) {
   }
 
   const arrOfSymbols = str.split('');
-  const arrOfNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const arrOfStrings = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   let alreadyHasADot = false;
-  let isPreviousSymbolsADot = false;
+  let isPreviousSymbolADot = false;
   const result = [];
 
   for (let i = 0; i < arrOfSymbols.length; i++) {
@@ -30,26 +30,25 @@ function getNumberFromString(str) {
     }
 
     if (symbol === '.') {
-      isPreviousSymbolsADot = true;
+      isPreviousSymbolADot = true;
       continue;
     }
 
-    if (!arrOfNumbers.includes(symbol)) {
-      isPreviousSymbolsADot = false;
+    if (!arrOfStrings.includes(symbol)) {
+      isPreviousSymbolADot = false;
       continue;
     }
 
-    if (isPreviousSymbolsADot) {
+    if (isPreviousSymbolADot) {
       result.push('.');
     }
 
     result.push(symbol);
-    isPreviousSymbolsADot = false;
+    isPreviousSymbolADot = false;
   }
 
   return parseFloat(result.join(''));
 }
-
 
 console.assert(getNumberFromString('123') === 123, 1);
 console.assert(getNumberFromString('1234567890') === 1234567890, 2);
@@ -60,9 +59,7 @@ console.assert(getNumberFromString('.5') === 0.5, 6);
 console.assert(getNumberFromString('5.asd') === 5, 7);
 console.assert(getNumberFromString('as3dd.sda4sd2sad') === 342, 8);
 console.assert(getNumberFromString('as3ddsda.4sd2sad') === 3.42, 9);
-
 console.assert(getNumberFromString(123) === 123, 10);
 console.assert(getNumberFromString(false) === null, 11);
-
 
 console.log('test complited');
