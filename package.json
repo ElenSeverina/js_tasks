@@ -1,0 +1,27 @@
+{
+  "name": "js_tasks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "getIndexesOfSearchStr.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElenSeverina/js_tasks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ElenSeverina/js_tasks/issues"
+  },
+  "homepage": "https://github.com/ElenSeverina/js_tasks#readme",
+  "dependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/eslint-parser": "^7.19.1",
+    "eslint": "^8.34.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}

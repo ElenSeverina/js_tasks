@@ -7,13 +7,13 @@
     <your function name>('blue bird on blue sky', 'blue') -> [0, 13]
 */
 function getIndexesOfSearchStr(currentStr, searchStr) {
-  let result = [];
-  if (typeof currentStr != "string") {
+  const result = [];
+  if (typeof currentStr !== 'string') {
     return result;
   }
 
   let index = currentStr.indexOf(searchStr);
-  while (index != -1) {
+  while (index !== -1) {
     result.push(index);
     index = currentStr.indexOf(searchStr, index + 1);
   }
