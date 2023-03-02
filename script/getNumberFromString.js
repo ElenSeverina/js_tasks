@@ -47,6 +47,10 @@ function getNumberFromString(str) {
     isPreviousSymbolADot = false;
   }
 
+  if (result.length === 0) {
+    return null;
+  }
+
   return parseFloat(result.join(''));
 }
 
@@ -61,5 +65,7 @@ console.assert(getNumberFromString('as3dd.sda4sd2sad') === 342, 8);
 console.assert(getNumberFromString('as3ddsda.4sd2sad') === 3.42, 9);
 console.assert(getNumberFromString(123) === 123, 10);
 console.assert(getNumberFromString(false) === null, 11);
+console.assert(getNumberFromString('sadasd.asdas') === null, 12);
+console.assert(getNumberFromString('.') === null, 13);
 
 console.log('test complited');

@@ -16,7 +16,24 @@
     iterator.current;
 */
 
-let iterator = new Iterator();
+function Iterator() {
+  this.count = 0;
+  this.current = 0;
+  this.next = function () {
+    this.count = this.count += 1,
+    this.current = this.count;
+    return {
+      current: this.current,
+      count: this.count,
+    };
+  };
+  this.reset = function () {
+    this.count = 0,
+    this.current = 0;
+  };
+}
+
+const iterator = new Iterator();
 console.assert(iterator.count === 0, 1);
 console.assert(iterator.current === 0, 2);
 
@@ -57,33 +74,3 @@ iterator = new Iterator({
 });
 // your all other tests here
 // ...
-
-console.log('Tests finished');
-
-const range = {
-  from: 0,
-  to: 5,
-};
-
-range[Symbol.iterator] = function () {
-  let current = this.from;
-  const last = this.to;
-
-  return {
-    next() {
-      if (current <= last) {
-        return {
-          done: false,
-          value: current++,
-        };
-      }
-      return {
-        done: true,
-      };
-    },
-  };
-};
-
-for (let num of range) {
-  console.log(num);
-}
