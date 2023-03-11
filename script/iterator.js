@@ -16,12 +16,38 @@
     iterator.current;
 */
 
-function Iterator() {
+function Iterator(step, start) {
   this.count = 0;
-  this.current = 0;
+  this.current = start;
+
+  if (typeof start === 'undefined') {
+    this.current = 0;
+  }
+
   this.next = function () {
-    this.count = this.count += 1,
-    this.current = this.count;
+    this.count = this.count += 1;
+    this.current = start;
+
+    if (typeof start === 'undefined') {
+      this.current = this.count;
+    }
+
+    if (typeof step === 'number') {
+      this.current = this.current += step;
+    }
+
+    if (step === '*') {
+      this.current = this.current * this.current;
+    }
+
+    if (step === '+') {
+      this.current = this.current + this.current;
+    }
+
+    if (step === '+' && start === 0) {
+      this.current = this.current += this.count;
+    }
+
     return {
       current: this.current,
       count: this.count,
@@ -33,7 +59,7 @@ function Iterator() {
   };
 }
 
-const iterator = new Iterator();
+let iterator = new Iterator();
 console.assert(iterator.count === 0, 1);
 console.assert(iterator.current === 0, 2);
 
@@ -46,10 +72,7 @@ iterator.reset();
 console.assert(iterator.count === 0, 6);
 console.assert(iterator.current === 0, 7);
 
-iterator = new Iterator({
-  step: 2,
-  start: 1,
-});
+iterator = new Iterator(2, 1);
 console.assert(iterator.count === 0, 8);
 console.assert(iterator.current === 1, 9);
 
@@ -57,10 +80,7 @@ iterator.next();
 console.assert(iterator.count === 1, 10);
 console.assert(iterator.current === 3, 11);
 
-iterator = new Iterator({
-  step: '*',
-  start: 3,
-});
+iterator = new Iterator('*', 3);
 console.assert(iterator.count === 0, 12);
 console.assert(iterator.current === 3, 13);
 
@@ -68,9 +88,10 @@ iterator.next();
 console.assert(iterator.count === 1, 14);
 console.assert(iterator.current === 9, 15);
 
-iterator = new Iterator({
-  step: '+',
-  start: 0,
-});
-// your all other tests here
-// ...
+iterator = new Iterator('+', 0);
+console.assert(iterator.count === 0, 12);
+console.assert(iterator.current === 0, 13);
+
+iterator.next();
+console.assert(iterator.count === 1, 16);
+console.assert(iterator.current === 1, 17);
