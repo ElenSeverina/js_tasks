@@ -137,17 +137,17 @@ iterator = new Iterator({
   step: 1,
   start: NaN,
 });
-console.assert(iterator.count === 0, 22);
-console.assert(iterator.current === 0, 23);
+console.assert(iterator.count === 0, 26);
+console.assert(iterator.current === 0, 27);
 
 iterator.next();
-console.assert(iterator.count === 1, 24);
-console.assert(iterator.current === 1, 25);
+console.assert(iterator.count === 1, 28);
+console.assert(iterator.current === 1, 29);
 
 iterator = new Iterator({
   step: 2,
   start: 0,
 });
-console.assert(iterator.next().next().reset().next().current === 2, 26);
+console.assert(iterator.next().next().reset().next().current === 2, 30);
 
 console.log('Tests finished');
