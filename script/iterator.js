@@ -16,42 +16,33 @@
     iterator.current;
 */
 
-function Iterator(options = {}) {
+function Iterator(options) {
   this.count = 0;
-  this.current = options.start ? options.start : 0;
+  this.current = options ? options.start : 0;
+  this.step = options ? options.step : 1;
 
-  this.next = function () {
-    this.count = this.count += 1;
-
-    if (typeof options.step === 'undefined') {
-      this.current = this.count;
+  this.next = () => {
+    if (typeof this.step === 'function') {
+      this.current = this.step(this.current);
+    } else if (this.step === '*') {
+      this.current *= this.current;
+    } else if (this.step === '+') {
+      this.current += 1;
+    } else {
+      this.current += this.step;
     }
-    if (typeof options.step === 'number') {
-      this.current = this.current += options.step;
-    }
-    if (options.step === '*') {
-      this.current = this.current * this.current;
-    }
-    if (options.step === '+' && options.start === 0) {
-      this.current = this.current += this.count;
-    }
-    if (options.step === '+' && options.start > 0) {
-      this.current = this.current + this.current;
-    }
-
-    return {
-      current: this.current,
-      count: this.count,
-    };
+    this.count++;
+    return this;
   };
 
-  this.reset = function () {
-    this.count = 0,
+  this.reset = () => {
+    this.count = 0;
     this.current = 0;
   };
 }
 
 let iterator = new Iterator();
+
 console.assert(iterator.count === 0, 1);
 console.assert(iterator.current === 0, 2);
 
@@ -59,6 +50,19 @@ iterator.next();
 console.assert(iterator.count === 1, 3);
 console.assert(iterator.next().count === 2, 4);
 console.assert(iterator.current === 2, 5);
+
+iterator = new Iterator({
+  step: (current) => current + 66,
+  start: 0,
+});
+iterator.next();
+console.assert(iterator.current === 66, 16);
+
+iterator = new Iterator({
+  step: 1,
+  start: 0,
+});
+console.assert(iterator.next().next().next().next().current === 4);
 
 iterator.reset();
 console.assert(iterator.count === 0, 6);

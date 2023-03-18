@@ -6,9 +6,9 @@
     https://subd.sitename.com/ru/post/167015/ -> sitename
 */
 
-const regex = /^(\w+:\/\/)?([a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+)\.+com|ua[a-zA-Z]{2,}(\/\S*)?$/;
-
 function getSiteNameFromUrl(str) {
+  const domains = ['com', 'org', 'net', 'ua', 'int', 'edu', 'gov'];
+  const regex = new RegExp(`^(\\w+:\\/\\/)?([a-zA-Z0-9-]+\\.)?([a-zA-Z0-9-]+)\\.+${domains.join('|')}[a-zA-Z]{2,}(\\/\\S*)?$`);
   return str.match(regex)[3];
 }
 
