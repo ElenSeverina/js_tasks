@@ -19,12 +19,12 @@
 function Iterator(options = {}) {
   this.count = 0;
 
-  let {start = 0, step = 1} = options;
+  let { start = 0, step = 1 } = options;
 
   this.current = start;
   this.step = step;
 
-  if (typeof start !== 'number' || isNaN(start)) {
+  if (typeof start !== "number" || isNaN(start)) {
     this.current = 0;
   }
 
@@ -35,19 +35,19 @@ function Iterator(options = {}) {
       newStep = this.step(this.current);
     }
 
-    if (typeof this.step === 'number') {
+    if (typeof this.step === "number") {
       newStep = this.current += this.step;
     }
 
-    if (this.step === '*') {
+    if (this.step === "*") {
       newStep = this.current * this.current;
     }
 
-    if (this.step === '+') {
+    if (this.step === "+") {
       newStep = this.current += 1;
     }
 
-    if (this.step === '+' && this.start > 0) {
+    if (this.step === "+" && this.start > 0) {
       newStep = this.current += this.current;
     }
 
@@ -88,7 +88,7 @@ console.assert(iterator.count === 1, 10);
 console.assert(iterator.current === 3, 11);
 
 iterator = new Iterator({
-  step: '*',
+  step: "*",
   start: 3,
 });
 console.assert(iterator.count === 0, 12);
@@ -99,7 +99,7 @@ console.assert(iterator.count === 1, 14);
 console.assert(iterator.current === 9, 15);
 
 iterator = new Iterator({
-  step: '+',
+  step: "+",
   start: 0,
 });
 console.assert(iterator.count === 0, 16);
@@ -124,7 +124,7 @@ console.assert(iterator.next().next().next().next().current === 4, 21);
 
 iterator = new Iterator({
   step: 2,
-  start: 'two',
+  start: "two",
 });
 console.assert(iterator.count === 0, 22);
 console.assert(iterator.current === 0, 23);
@@ -150,4 +150,4 @@ iterator = new Iterator({
 });
 console.assert(iterator.next().next().reset().next().current === 2, 30);
 
-console.log('Tests finished');
+console.log("Tests finished");
