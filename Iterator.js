@@ -30,6 +30,7 @@ function Iterator(options = {}) {
 
   this.next = () => {
     let newStep = this.step;
+    this.count++;
 
     if (typeof this.step === "function") {
       newStep = this.step(this.current);
@@ -43,16 +44,15 @@ function Iterator(options = {}) {
       newStep = this.current * this.current;
     }
 
-    if (this.step === "+") {
-      newStep = this.current += 1;
+    if (this.step === "+" && start === 0) {
+      newStep = this.current += this.count;
     }
 
-    if (this.step === "+" && this.start > 0) {
+    if (this.step === "+" && start > 0) {
       newStep = this.current += this.current;
     }
 
     this.current = newStep;
-    this.count++;
     return this;
   };
 
