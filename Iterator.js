@@ -45,7 +45,7 @@ function Iterator(options = {}) {
     }
 
     if (this.step === "+" && start === 0) {
-      newStep = this.current += this.count;
+      newStep = this.current += 1;
     }
 
     if (this.step === "+" && start > 0) {
