@@ -17,6 +17,7 @@
 */
 
 function Iterator(options = {}) {
+  const arrOfAllowedSteps = ["+", "-", "*", "/"];
   this.count = 0;
 
   let { start = 0, step = 1 } = options;
@@ -24,7 +25,16 @@ function Iterator(options = {}) {
   this.current = start;
   this.step = step;
 
-  if (typeof start !== "number" || isNaN(start)) {
+  if (
+    (!arrOfAllowedSteps.includes(step) &&
+      typeof step !== "number" &&
+      typeof step !== "function") ||
+    step === Infinity
+  ) {
+    this.step = 1;
+  }
+
+  if (typeof start !== "number" || isNaN(start) || start === Infinity) {
     this.current = 0;
   }
 
@@ -40,16 +50,26 @@ function Iterator(options = {}) {
       newStep = this.current += this.step;
     }
 
-    if (this.step === "*") {
-      newStep = this.current * this.current;
-    }
-
-    if (this.step === "+" && start === 0) {
+    if (step === 0 && start === 0) {
       newStep = this.current += 1;
     }
 
-    if (this.step === "+" && start > 0) {
+    if (this.step < 0 && this.start > 0) {
+      newStep = this.current -= this.step;
+    }
+
+    if (this.step === "*") {
+      newStep = this.current * this.current;
+      if (newStep === 0) {
+        newStep += 2;
+      }
+    }
+
+    if (this.step === "+") {
       newStep = this.current += this.current;
+      if (newStep === 0) {
+        newStep += 1;
+      }
     }
 
     this.current = newStep;
@@ -58,7 +78,10 @@ function Iterator(options = {}) {
 
   this.reset = () => {
     this.count = 0;
-    this.current = 0;
+    this.current = start;
+    if (typeof start !== "number" || isNaN(start) || start === Infinity) {
+      this.current = 0;
+    }
     return this;
   };
 }
@@ -102,6 +125,7 @@ iterator = new Iterator({
   step: "+",
   start: 0,
 });
+
 console.assert(iterator.count === 0, 16);
 console.assert(iterator.current === 0, 17);
 
@@ -109,45 +133,153 @@ iterator.next();
 console.assert(iterator.count === 1, 18);
 console.assert(iterator.current === 1, 19);
 
+iterator.next().next();
+console.assert(iterator.count === 3, 20);
+console.assert(iterator.current === 4, 21);
+
 iterator = new Iterator({
   step: (current) => current + 66,
   start: 0,
 });
 iterator.next();
-console.assert(iterator.current === 66, 20);
-
-iterator = new Iterator({
-  step: 1,
-  start: 0,
-});
-console.assert(iterator.next().next().next().next().current === 4, 21);
+console.assert(iterator.current === 66, 22);
 
 iterator = new Iterator({
   step: 2,
   start: "two",
 });
-console.assert(iterator.count === 0, 22);
-console.assert(iterator.current === 0, 23);
+console.assert(iterator.count === 0, 23);
+console.assert(iterator.current === 0, 24);
 
 iterator.next();
-console.assert(iterator.count === 1, 24);
-console.assert(iterator.current === 2, 25);
+console.assert(iterator.count === 1, 25);
+console.assert(iterator.current === 2, 26);
+
+iterator = new Iterator({
+  step: {},
+  start: {},
+});
+console.assert(iterator.count === 0, 27);
+console.assert(iterator.current === 0, 28);
+
+iterator.next();
+console.assert(iterator.count === 1, 29);
+console.assert(iterator.current === 1, 30);
 
 iterator = new Iterator({
   step: 1,
   start: NaN,
 });
-console.assert(iterator.count === 0, 26);
-console.assert(iterator.current === 0, 27);
+console.assert(iterator.count === 0, 31);
+console.assert(iterator.current === 0, 32);
 
 iterator.next();
-console.assert(iterator.count === 1, 28);
-console.assert(iterator.current === 1, 29);
+console.assert(iterator.count === 1, 33);
+console.assert(iterator.current === 1, 34);
 
 iterator = new Iterator({
-  step: 2,
+  step: "*",
   start: 0,
 });
-console.assert(iterator.next().next().reset().next().current === 2, 30);
+
+iterator.next().next().next();
+console.assert(iterator.count === 3, 35);
+console.assert(iterator.current === 16, 36);
+
+iterator.reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 4, 37);
+
+iterator = new Iterator({
+  step: "asd",
+  start: NaN,
+});
+
+iterator.next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 2, 38);
+
+iterator.reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 2, 39);
+
+iterator = new Iterator({
+  step: -1,
+  start: 2,
+});
+console.assert(iterator.count === 0, {});
+console.assert(iterator.current === 2, 40);
+
+iterator.next().next().reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 0, 41);
+
+iterator = new Iterator({
+  step: -11,
+  start: -1,
+});
+console.assert(iterator.count === 0, {});
+console.assert(iterator.current === -1, 42);
+
+iterator.next().next().reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === -23, 43);
+
+iterator = new Iterator({
+  step: 0,
+  start: 0,
+});
+console.assert(iterator.count === 0, {});
+console.assert(iterator.current === 0, 44);
+
+iterator.next().next().reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 2, 45);
+
+iterator = new Iterator({
+  step: "*",
+  start: -123,
+});
+console.assert(iterator.count === 0, {});
+console.assert(iterator.current === -123, 46);
+
+iterator.next().next().reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 228886641, 47);
+
+iterator = new Iterator({
+  step: "+",
+  start: -13,
+});
+console.assert(iterator.count === 0, {});
+console.assert(iterator.current === -13, 48);
+
+iterator.next().next().reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === -52, 49);
+
+iterator = new Iterator({
+  step: Infinity,
+  start: BigInt(123),
+});
+
+console.assert(iterator.count === 0, {});
+console.assert(iterator.current === 0, 50);
+
+iterator.next().next().reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 2, 51);
+
+iterator = new Iterator({
+  step: Infinity,
+  start: Infinity,
+});
+
+console.assert(iterator.count === 0, {});
+console.assert(iterator.current === 0, 52);
+
+iterator.next().next().reset().next().next();
+console.assert(iterator.count === 2, {});
+console.assert(iterator.current === 2, 53);
 
 console.log("Tests finished");
