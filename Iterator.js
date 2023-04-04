@@ -17,26 +17,6 @@
 */
 
 function Iterator(options = {}) {
-  const arrOfAllowedSteps = ["+", "-", "*", "/"];
-  this.count = 0;
-
-  let { start = 0, step = 1 } = options;
-
-  this.current = start;
-  this.step = step;
-
-  if (
-    (!arrOfAllowedSteps.includes(step) &&
-      typeof step !== "number" &&
-      typeof step !== "function") ||
-    step === Infinity
-  ) {
-    this.step = 1;
-  }
-
-  if (typeof start !== "number" || isNaN(start) || start === Infinity) {
-    this.current = 0;
-  }
 
   this.next = () => {
     let newStep = this.step;
@@ -47,29 +27,19 @@ function Iterator(options = {}) {
     }
 
     if (typeof this.step === "number") {
-      newStep = this.current += this.step;
+      newStep = this.current + this.step;
     }
 
-    if (step === 0 && start === 0) {
+    if (this.step === 0) {
       newStep = this.current += 1;
     }
 
-    if (this.step < 0 && this.start > 0) {
-      newStep = this.current -= this.step;
+    if (this.step === '+') {
+      newStep = this.current + this.current || 1;
     }
 
-    if (this.step === "*") {
-      newStep = this.current * this.current;
-      if (newStep === 0) {
-        newStep += 2;
-      }
-    }
-
-    if (this.step === "+") {
-      newStep = this.current += this.current;
-      if (newStep === 0) {
-        newStep += 1;
-      }
+    if (this.step === '*') {
+      newStep = this.current * this.current || 2;
     }
 
     this.current = newStep;
@@ -78,12 +48,30 @@ function Iterator(options = {}) {
 
   this.reset = () => {
     this.count = 0;
+    let { start = 0, step = 1 } = options;
     this.current = start;
+    this.step = step;
+
+    if (
+      (step !== "+" 
+        && step !== "-" 
+        && step !== "*" 
+        && step !== "/" 
+        && typeof step !== "number" 
+        && typeof step !== "function"
+      ) ||
+      step === Infinity
+    ) {
+      this.step = 1;
+    }
+
     if (typeof start !== "number" || isNaN(start) || start === Infinity) {
       this.current = 0;
     }
     return this;
   };
+
+  this.reset();
 }
 
 let iterator = new Iterator();
