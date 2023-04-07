@@ -13,46 +13,54 @@
     - first name,last name,user name
     - person,user data
 */
-class Scraper {}
+class Scraper {
+  constructor() {
 
-const productItems = Array.from(document.querySelectorAll(".caption"));
-const productRatings = Array.from(document.querySelectorAll(".ratings"));
-let productNames = getProductNames(productItems);
-let productPrices = getProductPrices(productItems);
-let productStars = getProductStars(productRatings);
-let productReviews = getProductReviews(productRatings);
-let productDescriptions = getProductDescriptions(productItems);
+  }
+  products = [];
 
-function getProductNames(array) {
-  return array.map(function (elem) {
-    return elem.querySelector("a").innerText;
-  });
+  productItems = document.querySelectorAll(".thumbnail");
+
+  createCSV() {
+    return `product name,prize,stars,reviews,info\r\nproducts`;
+  }
+  
+  parse() {
+    productItems.forEach(
+      item => products.push(getProductName(item)),
+      products.push(getProductPrice(item)),
+      products.push(getProductStars(item)),
+      products.push(getProductReview(item)),
+      products.push(getProductInfo(item))
+    )
+    return this;
+  }
+
+  getProductName(item) {
+    return item.querySelector("a").innerText;
+  }
+
+  getProductPrice(item) {
+    return item.querySelector("h4").innerText;
+  }
+
+  getProductStars(item) {
+    return item.querySelector("p[data-rating]").dataset.rating;
+  }
+  
+  getProductReview(item) {
+    return item.querySelector(".pull-right").innerText;
+  }
+  
+  getProductInfo(item) {
+    return item.querySelector(".description").innerText;
+  }
+  
+  getSCV(products) {
+    this.products
+  };
 }
 
-function getProductPrices(array) {
-  return array.map(function (elem) {
-    return elem.querySelector("h4").innerText;
-  });
-}
+const scrapper = new Scraper();
+console.log(scrapper.parse().getSCV());
 
-function getProductStars(array) {
-  return array.map(function (elem) {
-    return elem.querySelector("p[data-rating]").dataset.rating;
-  });
-}
-
-function getProductReviews(array) {
-  return array.map(function (elem) {
-    return elem.querySelector(".pull-right").innerText;
-  });
-}
-
-function getProductDescriptions(array) {
-  return array.map(function (elem) {
-    return elem.querySelector(".description").innerText;
-  });
-}
-
-function createCSV() {
-  return `product name,prize,stars,reviews,info`;
-}
