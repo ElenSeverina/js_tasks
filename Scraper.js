@@ -13,54 +13,34 @@
     - first name,last name,user name
     - person,user data
 */
-class Scraper {
-  constructor() {
 
-  }
-  products = [];
+let productItems = document.querySelector(".thumbnail");
+let productDescription = [];
+productItems.forEach(function (item) {
+  productDescription.push(
+    getProductName(item),
+    getProductPrice(item),
+    getProductStars(item),
+    getProductReview(item),
+    getProductInfo(item)
+  )
+});
 
-  productItems = document.querySelectorAll(".thumbnail");
-
-  createCSV() {
-    return `product name,prize,stars,reviews,info\r\nproducts`;
-  }
-  
-  parse() {
-    productItems.forEach(
-      item => products.push(getProductName(item)),
-      products.push(getProductPrice(item)),
-      products.push(getProductStars(item)),
-      products.push(getProductReview(item)),
-      products.push(getProductInfo(item))
-    )
-    return this;
-  }
-
-  getProductName(item) {
-    return item.querySelector("a").innerText;
-  }
-
-  getProductPrice(item) {
-    return item.querySelector("h4").innerText;
-  }
-
-  getProductStars(item) {
-    return item.querySelector("p[data-rating]").dataset.rating;
-  }
-  
-  getProductReview(item) {
-    return item.querySelector(".pull-right").innerText;
-  }
-  
-  getProductInfo(item) {
-    return item.querySelector(".description").innerText;
-  }
-  
-  getSCV(products) {
-    this.products
-  };
+function getProductName(item) {
+  return item.querySelector(".title").innerText;
+}
+function getProductPrice(item) {
+  return item.querySelector(".price").innerText;
 }
 
-const scrapper = new Scraper();
-console.log(scrapper.parse().getSCV());
+function getProductStars(item) {
+  return item.querySelector("p[data-rating]").dataset.rating;
+}
 
+function getProductReview(item) {
+  return item.querySelector("p.pull-right").innerText;
+}
+
+function getProductInfo(item) {
+  return item.querySelector(".description").innerText;
+}
