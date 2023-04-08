@@ -14,17 +14,27 @@
     - person,user data
 */
 
-let productItems = document.querySelector(".thumbnail");
-let productDescription = [];
+let productItems = document.querySelectorAll(".thumbnail");
+let productDescription = {
+  name: '', 
+  price: '', 
+  stars: '', 
+  reviews: '',
+  info: ''
+};
+
+let products = [];
 productItems.forEach(function (item) {
-  productDescription.push(
-    getProductName(item),
-    getProductPrice(item),
-    getProductStars(item),
-    getProductReview(item),
-    getProductInfo(item)
-  )
+  productDescription = {
+    name: getProductName(item), 
+    price: getProductPrice(item), 
+    stars: getProductStars(item), 
+    reviews: getProductReview(item),
+    info: getProductInfo(item)
+  }
+  products.push(productDescription);
 });
+
 
 function getProductName(item) {
   return item.querySelector(".title").innerText;
@@ -44,3 +54,11 @@ function getProductReview(item) {
 function getProductInfo(item) {
   return item.querySelector(".description").innerText;
 }
+
+function createCSV() {
+  products.forEach(function (item) {
+    console.log(item);
+  });
+}
+
+createCSV();

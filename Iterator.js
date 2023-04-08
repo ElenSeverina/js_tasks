@@ -42,6 +42,14 @@ function Iterator(options = {}) {
       newStep = this.current * this.current || 2;
     }
 
+    if (this.step === '-') {
+      newStep = this.current - this.start;
+    }
+
+    if (this.step === '/') {
+      newStep = this.current / 2;
+    }
+
     this.current = newStep;
     return this;
   };
@@ -49,6 +57,7 @@ function Iterator(options = {}) {
   this.reset = () => {
     this.count = 0;
     let { start = 0, step = 1 } = options;
+    this.start = start;
     this.current = start;
     this.step = step;
 
@@ -65,7 +74,7 @@ function Iterator(options = {}) {
       this.step = 1;
     }
 
-    if (typeof start !== "number" || isNaN(start) || start === Infinity) {
+    if (typeof start !== "number" || Number.isNaN(start) || start === Infinity) {
       this.current = 0;
     }
     return this;
@@ -269,5 +278,27 @@ console.assert(iterator.current === 0, 52);
 iterator.next().next().reset().next().next();
 console.assert(iterator.count === 2, {});
 console.assert(iterator.current === 2, 53);
+
+iterator = new Iterator({
+  step: "-",
+  start: 3,
+});
+console.assert(iterator.count === 0, 54);
+console.assert(iterator.current === 3, 55);
+
+iterator.next().next();
+console.assert(iterator.count === 2, 56);
+console.assert(iterator.current === -3, 57);
+
+iterator = new Iterator({
+  step: "/",
+  start: 10,
+});
+console.assert(iterator.count === 0, 58);
+console.assert(iterator.current === 10, 59);
+
+iterator.next().next();
+console.assert(iterator.count === 2, 60);
+console.assert(iterator.current === 2.5, 61);
 
 console.log("Tests finished");
