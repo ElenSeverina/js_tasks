@@ -17,6 +17,7 @@
 */
 
 function Iterator(options = {}) {
+  let result = [];
 
   this.next = () => {
     let newStep = this.step;
@@ -43,14 +44,20 @@ function Iterator(options = {}) {
     }
 
     if (this.step === '-') {
-      newStep = this.current - this.start;
+      newStep = this.current - this.current / 2;
     }
 
     if (this.step === '/') {
-      newStep = this.current / 2;
+      newStep = Math.sqrt(this.current);
     }
-
     this.current = newStep;
+
+    function getAllSteps() {
+      result.push(newStep);
+      return result;
+    }
+    getAllSteps();
+
     return this;
   };
 
@@ -60,6 +67,7 @@ function Iterator(options = {}) {
     this.start = start;
     this.current = start;
     this.step = step;
+    this.result = result;
 
     if (
       (step !== "+" 
@@ -281,24 +289,56 @@ console.assert(iterator.current === 2, 53);
 
 iterator = new Iterator({
   step: "-",
-  start: 3,
+  start: 16,
 });
 console.assert(iterator.count === 0, 54);
-console.assert(iterator.current === 3, 55);
+console.assert(iterator.current === 16, 55);
 
 iterator.next().next();
 console.assert(iterator.count === 2, 56);
-console.assert(iterator.current === -3, 57);
+console.assert(iterator.current === 4, 57);
 
 iterator = new Iterator({
   step: "/",
-  start: 10,
+  start: 256,
 });
 console.assert(iterator.count === 0, 58);
-console.assert(iterator.current === 10, 59);
+console.assert(iterator.current === 256, 59);
 
-iterator.next().next();
-console.assert(iterator.count === 2, 60);
-console.assert(iterator.current === 2.5, 61);
+iterator.next().next().next();
+console.assert(iterator.count === 3, 60);
+console.assert(iterator.current === 2, 61);
+
+iterator = new Iterator({
+  step: "*",
+  start: 2,
+});
+
+iterator.next().next().next();
+console.assert(JSON.stringify(iterator.result === '[4,16,256]'), 62);
+
+iterator = new Iterator({
+  step: "+",
+  start: 2,
+});
+
+iterator.next().next().next();
+console.assert(JSON.stringify(iterator.result === '[4,8,16]'), 63);
+
+iterator = new Iterator({
+  step: "-",
+  start: 16,
+});
+
+iterator.next().next().next();
+console.assert(JSON.stringify(iterator.result === '[8,4,2]'), 64);
+
+iterator = new Iterator({
+  step: "/",
+  start: 256,
+});
+
+iterator.next().next().next();
+console.assert(JSON.stringify(iterator.result === '[16,4,2]'), 65);
 
 console.log("Tests finished");

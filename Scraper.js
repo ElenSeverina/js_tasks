@@ -13,52 +13,58 @@
     - first name,last name,user name
     - person,user data
 */
-
-let productItems = document.querySelectorAll(".thumbnail");
-let productDescription = {
-  name: '', 
-  price: '', 
-  stars: '', 
-  reviews: '',
-  info: ''
-};
-
-let products = [];
-productItems.forEach(function (item) {
-  productDescription = {
-    name: getProductName(item), 
-    price: getProductPrice(item), 
-    stars: getProductStars(item), 
-    reviews: getProductReview(item),
-    info: getProductInfo(item)
+class Scrapper {
+  constructor() {
   }
-  products.push(productDescription);
-});
 
-
-function getProductName(item) {
-  return item.querySelector(".title").innerText;
+  productData = {
+    name: '', 
+    price: '', 
+    stars: '', 
+    reviews: '',
+    info: ''
+  };
+  
+  products = [];
+  parse() {
+    document.querySelectorAll(".thumbnail").forEach(item => {
+      productData = {
+        name: getProductName(item), 
+        price: getProductPrice(item), 
+        stars: getProductStars(item), 
+        reviews: getProductReview(item),
+        info: getProductInfo(item)
+      }
+      products.push(productData);
+    })
+    return products;
+  }
+  
+  getProductName() {
+    return item.querySelector(".title").innerText;
+  }
+  getProductPrice() {
+    return item.querySelector(".price").innerText;
+  }
+  
+  getProductStars() {
+    return item.querySelector("p[data-rating]").dataset.rating;
+  }
+  
+  getProductReview() {
+    return item.querySelector("p.pull-right").innerText;
+  }
+  
+  getProductInfo() {
+    return item.querySelector(".description").innerText;
+  }
+  
+  createCSV() {
+    products.forEach(item => {
+      console.log(item);
+    });
+  }
 }
-function getProductPrice(item) {
-  return item.querySelector(".price").innerText;
-}
 
-function getProductStars(item) {
-  return item.querySelector("p[data-rating]").dataset.rating;
-}
-
-function getProductReview(item) {
-  return item.querySelector("p.pull-right").innerText;
-}
-
-function getProductInfo(item) {
-  return item.querySelector(".description").innerText;
-}
-
-function createCSV() {
-  products.forEach(function (item) {
-    console.log(item);
-  });
-}
-
-createCSV();
+let newScrapper = new Scrapper();
+newScrapper.parse().createCSV();
