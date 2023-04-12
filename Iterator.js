@@ -76,9 +76,8 @@ function Iterator(options = {}) {
         && step !== "/" 
         && typeof step !== "number" 
         && typeof step !== "function"
-      ) ||
-      step === Infinity
-      || step === -Infinity
+      ) || 
+      Math.abs(step) === Infinity
     ) {
       this.step = 1;
     }
