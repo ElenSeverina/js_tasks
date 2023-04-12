@@ -78,6 +78,7 @@ function Iterator(options = {}) {
         && typeof step !== "function"
       ) ||
       step === Infinity
+      || step === -Infinity
     ) {
       this.step = 1;
     }
