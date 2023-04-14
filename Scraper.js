@@ -16,55 +16,54 @@
 class Scrapper {
   constructor() {
   }
+  
+  #products = [];
 
-  productData = {
-    name: '', 
-    price: '', 
-    stars: '', 
-    reviews: '',
-    info: ''
-  };
-  
-  products = [];
-  parse() {
-    document.querySelectorAll(".thumbnail").forEach(item => {
-      productData = {
-        name: getProductName(item), 
-        price: getProductPrice(item), 
-        stars: getProductStars(item), 
-        reviews: getProductReview(item),
-        info: getProductInfo(item)
-      }
-      products.push(productData);
-    })
-    return products;
-  }
-  
-  getProductName() {
+  #getProductName(item) {
     return item.querySelector(".title").innerText;
   }
-  getProductPrice() {
+
+  #getProductPrice(item) {
     return item.querySelector(".price").innerText;
   }
   
-  getProductStars() {
+  #getProductStars(item) {
     return item.querySelector("p[data-rating]").dataset.rating;
   }
   
-  getProductReview() {
+  #getProductReview(item) {
     return item.querySelector("p.pull-right").innerText;
   }
   
-  getProductInfo() {
+  #getProductInfo(item) {
     return item.querySelector(".description").innerText;
   }
   
+  parse() {
+    Array.from(document.querySelectorAll(".thumbnail"))
+      .forEach(item => {
+        this.#products.push({
+          name: this.#getProductName(item), 
+          price: this.#getProductPrice(item), 
+          stars: this.#getProductStars(item), 
+          reviews: this.#getProductReview(item),
+          info: this.#getProductInfo(item)
+        });
+      });
+  }
+  
   createCSV() {
-    products.forEach(item => {
-      console.log(item);
+    let arr = ['product name,prize,stars,reviews,info'];
+    this.#products.map(item => {
+      arr.push(`${item.name}, ${item.price}, ${item.stars}, ${item.reviews}, ${item.info}`);
     });
+    arr.forEach((item => {console.log(item)}))
   }
 }
 
 let newScrapper = new Scrapper();
-newScrapper.parse().createCSV();
+
+newScrapper.parse();
+newScrapper.createCSV();
+
+// product name,prize,stars,reviews,info
