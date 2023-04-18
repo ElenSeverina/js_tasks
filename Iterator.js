@@ -30,10 +30,6 @@ function Iterator(options = {}) {
       newStep = this.current + this.step;
     }
 
-    if (this.step === 0) {
-      newStep = this.current += 1;
-    }
-
     if (this.step === '+') {
       newStep = this.current + this.current || 1;
     }
@@ -69,12 +65,12 @@ function Iterator(options = {}) {
         && typeof step !== "number" 
         && typeof step !== "function"
       ) || 
-      Math.abs(step) === Infinity
+      Math.abs(step) === Infinity || step === 0
     ) {
       this.step = 1;
     }
 
-    if (typeof start !== "number" || Number.isNaN(start) || start === Infinity) {
+    if (typeof start !== "number" || Number.isNaN(start) || Math.abs(start) === Infinity) {
       this.current = 0;
     }
     return this;
