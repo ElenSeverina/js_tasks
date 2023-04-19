@@ -53,11 +53,11 @@ class Scrapper {
   }
   
   createCSV() {
-    let arr = ['product name,prize,stars,reviews,info'];
+    let arr = [`product name\tprice($)\tstars\treviews\tinfo`];
     this.#products.map(item => {
-      arr.push(`${item.name}, ${item.price}, ${item.stars}, ${item.reviews}, ${item.info}`);
+      arr.push(`${item.name}\t${item.price}\t${item.stars}\t${item.reviews}\t${item.info}`);
     });
-    arr.forEach((item => {console.log(item)}))
+    return arr.join('\r\n')
   }
 }
 
@@ -66,4 +66,7 @@ let newScrapper = new Scrapper();
 newScrapper.parse();
 newScrapper.createCSV();
 
-// product name,prize,stars,reviews,info
+console.assert(
+  newScrapper.createCSV() === "product name\tprice($)\tstars\treviews\tinfo\r\niPad Mini Retina\t$537.99\t2\t8 reviews\tWi-Fi + Cellular, 32GB, Silver\r\nHewlett Packard...\t$364.46\t1\t12 reviews\tHewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\r\nAcer Nitro 5 AN5...\t$1140.62\t3\t14 reviews\tAcer Nitro 5 AN515-51, 15.6\" FHD IPS, Core i7-7700HQ, 8GB, 256GB SSD +1TB, GeForce GTX 1050 Ti 4GB, Windows 10 Home + Windows 10 Home",
+  'scrap-test',
+);
