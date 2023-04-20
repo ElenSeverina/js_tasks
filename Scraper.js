@@ -55,7 +55,8 @@ class Scrapper {
   createCSV() {
     let arr = [`product name\tprice($)\tstars\treviews\tinfo`];
     this.#products.map(item => {
-      arr.push(`${item.name}\t${item.price}\t${item.stars}\t${+/\d+/.exec(item.reviews)}\t${item.info}`);
+      arr.push(`${item.name}\t${item.price.slice(1)}\t${item.stars}\t${+/\d+/.exec(item.reviews)}\t${item.info}`);
+      console.log(item.name);
     });
     return arr.join('\r\n')
   }
@@ -67,6 +68,6 @@ newScrapper.parse();
 newScrapper.createCSV();
 
 console.assert(
-  newScrapper.createCSV() === "product name\tprice($)\tstars\treviews\tinfo\r\niPad Mini Retina\t$537.99\t2\t8\tWi-Fi + Cellular, 32GB, Silver\r\nHewlett Packard...\t$364.46\t1\t12\tHewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\r\nAcer Nitro 5 AN5...\t$1140.62\t3\t14\tAcer Nitro 5 AN515-51, 15.6\" FHD IPS, Core i7-7700HQ, 8GB, 256GB SSD +1TB, GeForce GTX 1050 Ti 4GB, Windows 10 Home + Windows 10 Home",
+  newScrapper.createCSV() === "product name\tprice($)\tstars\treviews\tinfo\r\niPad Mini Retina\t537.99\t2\t8\tWi-Fi + Cellular, 32GB, Silver\r\nHewlett Packard...\t364.46\t1\t12\tHewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\r\nAcer Nitro 5 AN5...\t1140.62\t3\t14\tAcer Nitro 5 AN515-51, 15.6\" FHD IPS, Core i7-7700HQ, 8GB, 256GB SSD +1TB, GeForce GTX 1050 Ti 4GB, Windows 10 Home + Windows 10 Home",
   'scrap-test',
 );
