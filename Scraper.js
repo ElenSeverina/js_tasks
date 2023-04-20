@@ -56,7 +56,6 @@ class Scrapper {
     let arr = [`product name\tprice($)\tstars\treviews\tinfo`];
     this.#products.map(item => {
       arr.push(`${item.name}\t${item.price.slice(1)}\t${item.stars}\t${+/\d+/.exec(item.reviews)}\t${item.info}`);
-      console.log(item.name);
     });
     return arr.join('\r\n')
   }
