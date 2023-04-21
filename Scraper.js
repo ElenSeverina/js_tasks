@@ -20,7 +20,7 @@ class Scrapper {
   #products = [];
 
   #getProductName(item) {
-    return item.querySelector(".title").innerText;
+    return item.querySelector(".title").getAttribute("title");
   }
 
   #getProductPrice(item) {
@@ -67,6 +67,6 @@ newScrapper.parse();
 newScrapper.createCSV();
 
 console.assert(
-  newScrapper.createCSV() === "product name\tprice($)\tstars\treviews\tinfo\r\niPad Mini Retina\t537.99\t2\t8\tWi-Fi + Cellular, 32GB, Silver\r\nHewlett Packard...\t364.46\t1\t12\tHewlett Packard 250 G6 Dark Ash Silver, 15.6\" HD, Celeron N3060 1.6GHz, 4GB, 128GB SSD, DOS\r\nAcer Nitro 5 AN5...\t1140.62\t3\t14\tAcer Nitro 5 AN515-51, 15.6\" FHD IPS, Core i7-7700HQ, 8GB, 256GB SSD +1TB, GeForce GTX 1050 Ti 4GB, Windows 10 Home + Windows 10 Home",
+  newScrapper.createCSV() === "product name\tprice($)\tstars\treviews\tinfo\r\nLenovo ThinkPad T470\t1349.23\t1\t5\tLenovo ThinkPad T470, 14\" FHD IPS, Core i5-7200U, 8GB, 256GB SSD, Windows 10 Pro\r\nLenovo IdeaPad Miix 510 Platinum Silver\t1212.16\t4\t0\tLenovo IdeaPad Miix 510 Platinum Silver, 12.2\" IPS Touch, Core i5-7200U, 8GB, 256GB SSD, 4G, Windows 10 Pro\r\nMSI GL72M 7RDX\t1099.00\t4\t1\tMSI GL72M 7RDX, 17.3\" FHD, Core i5-7300HQ, 8GB, 1TB + 128GB SSD, GeForce GTX 1050 2GB, Windows 10 Home",
   'scrap-test',
 );
