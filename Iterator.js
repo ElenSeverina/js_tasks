@@ -4,14 +4,11 @@
     The iterator must take an options parameter to set options such as: step, start etc...
     Step can be: number | '+' | '*' | (current: number) => number.
     All methods of the iterator must be chained.
-
     Example:
     const iterator = new Iterator();
-
     iterator.next();
     iterator.reset();
     iterator.next().next();
-
     iterator.count;
     iterator.current;
 */
@@ -35,16 +32,11 @@ function Iterator(options = {}) {
     }
 
     if (this.step === '*') {
-      newStep = this.current * this.current || 2;
+      newStep = this.current === 1
+        ? 2
+        : this.current * this.current || 2;
     }
 
-    if (this.step === '-') {
-      newStep = this.current - this.current / 2;
-    }
-
-    if (this.step === '/') {
-      newStep = Math.sqrt(this.current);
-    }
     this.current = newStep;
 
     return this;
@@ -58,19 +50,33 @@ function Iterator(options = {}) {
     this.step = step;
 
     if (
-      (step !== "+" 
-        && step !== "-" 
-        && step !== "*" 
-        && step !== "/" 
-        && typeof step !== "number" 
-        && typeof step !== "function"
-      ) || 
-      Math.abs(step) === Infinity || step === 0
+      typeof step === 'string'
+      && step !== '+'
+      && step !== '*'
     ) {
       this.step = 1;
     }
 
-    if (typeof start !== "number" || Number.isNaN(start) || Math.abs(start) === Infinity) {
+    if (
+      typeof step === 'number'
+      && (step === 0 
+        || Number.isNaN(step) 
+        || Math.abs(step) === Infinity)
+    ) {
+      this.step = 1;
+    }
+
+    if (
+      typeof step === 'object'
+      && typeof step !== 'function'
+    ) {
+      this.step = 1;
+    }
+
+    if (
+      typeof start !== 'number'
+      || Number.isNaN(start)
+      || Math.abs(start) === Infinity) {
       this.current = 0;
     }
     return this;
@@ -79,270 +85,262 @@ function Iterator(options = {}) {
   this.reset();
 }
 
+const $data = { toString: () => new Error() };
+
 let iterator = new Iterator();
-console.assert(iterator.count === 0, 1);
-console.assert(iterator.current === 0, 2);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next();
-console.assert(iterator.count === 1, 3);
-console.assert(iterator.next().count === 2, 4);
-console.assert(iterator.current === 2, 5);
+console.assert(iterator.count === 1, $data);
+console.assert(iterator.next().count === 2, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator.reset();
-console.assert(iterator.count === 0, 6);
-console.assert(iterator.current === 0, 7);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator = new Iterator({
   step: 2,
   start: 1,
 });
-console.assert(iterator.count === 0, 8);
-console.assert(iterator.current === 1, 9);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 1, $data);
 
 iterator.next();
-console.assert(iterator.count === 1, 10);
-console.assert(iterator.current === 3, 11);
+console.assert(iterator.count === 1, $data);
+console.assert(iterator.current === 3, $data);
 
 iterator = new Iterator({
-  step: "*",
+  step: '*',
   start: 3,
 });
-console.assert(iterator.count === 0, 12);
-console.assert(iterator.current === 3, 13);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 3, $data);
 
 iterator.next();
-console.assert(iterator.count === 1, 14);
-console.assert(iterator.current === 9, 15);
+console.assert(iterator.count === 1, $data);
+console.assert(iterator.current === 9, $data);
 
 iterator = new Iterator({
-  step: "+",
+  step: '+',
   start: 0,
 });
 
-console.assert(iterator.count === 0, 16);
-console.assert(iterator.current === 0, 17);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next();
-console.assert(iterator.count === 1, 18);
-console.assert(iterator.current === 1, 19);
+console.assert(iterator.count === 1, $data);
+console.assert(iterator.current === 1, $data);
 
 iterator.next().next();
-console.assert(iterator.count === 3, 20);
-console.assert(iterator.current === 4, 21);
+console.assert(iterator.count === 3, $data);
+console.assert(iterator.current === 4, $data);
 
 iterator = new Iterator({
   step: (current) => current + 66,
   start: 0,
 });
 iterator.next();
-console.assert(iterator.current === 66, 22);
+console.assert(iterator.current === 66, $data);
 
 iterator = new Iterator({
   step: 2,
   start: "two",
 });
-console.assert(iterator.count === 0, 23);
-console.assert(iterator.current === 0, 24);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next();
-console.assert(iterator.count === 1, 25);
-console.assert(iterator.current === 2, 26);
+console.assert(iterator.count === 1, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator = new Iterator({
   step: {},
   start: {},
 });
-console.assert(iterator.count === 0, 27);
-console.assert(iterator.current === 0, 28);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next();
-console.assert(iterator.count === 1, 29);
-console.assert(iterator.current === 1, 30);
+console.assert(iterator.count === 1, $data);
+console.assert(iterator.current === 1, $data);
 
 iterator = new Iterator({
   step: 1,
   start: NaN,
 });
-console.assert(iterator.count === 0, 31);
-console.assert(iterator.current === 0, 32);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next();
-console.assert(iterator.count === 1, 33);
-console.assert(iterator.current === 1, 34);
+console.assert(iterator.count === 1, $data);
+console.assert(iterator.current === 1, $data);
 
 iterator = new Iterator({
-  step: "*",
+  step: '*',
   start: 0,
 });
 
 iterator.next().next().next();
-console.assert(iterator.count === 3, 35);
-console.assert(iterator.current === 16, 36);
+console.assert(iterator.count === 3, $data);
+console.assert(iterator.current === 16, $data);
 
 iterator.reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 4, 37);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 4, $data);
 
 iterator = new Iterator({
-  step: "asd",
+  step: 'asd',
   start: NaN,
 });
 
 iterator.next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 2, 38);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator.reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 2, 39);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator = new Iterator({
   step: -1,
   start: 2,
 });
-console.assert(iterator.count === 0, {});
-console.assert(iterator.current === 2, 40);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator.next().next().reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 0, 41);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator = new Iterator({
   step: -11,
   start: -1,
 });
-console.assert(iterator.count === 0, {});
-console.assert(iterator.current === -1, 42);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === -1, $data);
 
 iterator.next().next().reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === -23, 43);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === -23, $data);
 
 iterator = new Iterator({
   step: 0,
   start: 0,
 });
-console.assert(iterator.count === 0, {});
-console.assert(iterator.current === 0, 44);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next().next().reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 2, 45);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator = new Iterator({
-  step: "*",
+  step: '*',
   start: -123,
 });
-console.assert(iterator.count === 0, {});
-console.assert(iterator.current === -123, 46);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === -123, $data);
 
 iterator.next().next().reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 228886641, 47);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 228886641, $data);
 
 iterator = new Iterator({
-  step: "+",
+  step: '+',
   start: -13,
 });
-console.assert(iterator.count === 0, {});
-console.assert(iterator.current === -13, 48);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === -13, $data);
 
 iterator.next().next().reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === -52, 49);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === -52, $data);
 
 iterator = new Iterator({
   step: Infinity,
   start: BigInt(123),
 });
 
-console.assert(iterator.count === 0, {});
-console.assert(iterator.current === 0, 50);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next().next().reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 2, 51);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator = new Iterator({
   step: Infinity,
   start: Infinity,
 });
 
-console.assert(iterator.count === 0, {});
-console.assert(iterator.current === 0, 52);
+console.assert(iterator.count === 0, $data);
+console.assert(iterator.current === 0, $data);
 
 iterator.next().next().reset().next().next();
-console.assert(iterator.count === 2, {});
-console.assert(iterator.current === 2, 53);
+console.assert(iterator.count === 2, $data);
+console.assert(iterator.current === 2, $data);
 
 iterator = new Iterator({
-  step: "-",
-  start: 16,
-});
-console.assert(iterator.count === 0, 54);
-console.assert(iterator.current === 16, 55);
-
-iterator.next().next();
-console.assert(iterator.count === 2, 56);
-console.assert(iterator.current === 4, 57);
-
-iterator = new Iterator({
-  step: "/",
-  start: 256,
-});
-console.assert(iterator.count === 0, 58);
-console.assert(iterator.current === 256, 59);
-
-iterator.next().next().next();
-console.assert(iterator.count === 3, 60);
-console.assert(iterator.current === 2, 61);
-
-iterator = new Iterator({
-  step: "*",
-  start: 2,
+  step: 3.5,
+  start: 2.1
 });
 
 console.assert(
   JSON.stringify(
-    new Array(3).fill('').map((i) => i === 0 ? iterator.start : iterator.next().current)
-  ) === '[4,16,256]', 
-  62,
+    new Array(4).fill('').map((_, i) => !!i ? iterator.next().current : iterator.current),
+  ) === '[2.1,5.6,9.1,12.6]',
+  $data
 );
 
 iterator = new Iterator({
-  step: "+",
-  start: 2,
+  step: (v) => v * 4,
+  start: 1,
 });
 
 console.assert(
   JSON.stringify(
-    new Array(3).fill('').map((i) => i === 0 ? iterator.start : iterator.next().current)
-  ) === '[4,8,16]',
-  63,
+    new Array(4).fill('').map((_, i) => !!i ? iterator.next().current : iterator.current),
+  ) === '[1,4,16,64]',
+  $data
 );
 
 iterator = new Iterator({
-  step: "-",
-  start: 16,
+  step: '+',
+  start: 0,
 });
 
 console.assert(
   JSON.stringify(
-    new Array(3).fill('').map((i) => i === 0 ? iterator.start : iterator.next().current)
-  ) === '[8,4,2]',
-  64,
+    new Array(5).fill('').map((_, i) => !!i ? iterator.next().current : iterator.current),
+  ) === '[0,1,2,4,8]',
+  $data
 );
 
 iterator = new Iterator({
-  step: "/",
-  start: 256,
+  step: '*',
+  start: 0,
 });
 
 console.assert(
   JSON.stringify(
-    new Array(3).fill('').map((i) => i === 0 ? iterator.start : iterator.next().current)
-  ) === '[16,4,2]',
-  65,
-)
+    new Array(4).fill('').map((_, i) => !!i ? iterator.next().current : iterator.current),
+  ) === '[0,2,4,16]',
+  $data
+);
 
-console.log("Tests finished");
+iterator = new Iterator({
+  step: '*',
+  start: 1,
+});
+
+console.assert(
+  JSON.stringify(
+    new Array(4).fill('').map((_, i) => !!i ? iterator.next().current : iterator.current),
+  ) === '[1,2,4,16]',
+  $data
+);
+
+console.log('Tests finished');
