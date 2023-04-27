@@ -14,7 +14,6 @@
 
 class ScrappAllProductsData {
   #products = [];
-  #parsedProducts = [];
 
   #getProductName(item) {
     return item.querySelector(".title").getAttribute("title");
@@ -50,42 +49,41 @@ class ScrappAllProductsData {
   }
 
   getParsed() {
+    let arr = [];
     this.#products.forEach(item => Object.entries(item).map(([key, value]) => 
-      this.#parsedProducts.push({
+      arr.push({
         header: {
-          title: key,
+          title: this.mapTitle(key),
           },
         data: {
           title: value,
           }
       })
     ))
-    return this.#parsedProducts;
+    return arr;
   }
 
-  fixTitle() {
-    this.#parsedProducts.forEach((_, index) => {
-      if (this.#parsedProducts[index].header.title === 'name') {
-        this.#parsedProducts[index].header.title = 'Product Name';
-      }
+  mapTitle(key) {
+    if (key === 'name') {
+      key = 'Product Name';
+    }
 
-      if (this.#parsedProducts[index].header.title === 'price') {
-        this.#parsedProducts[index].header.title = 'Price';
-      }
+    if (key === 'price') {
+      key = 'Price';
+    }
 
-      if (this.#parsedProducts[index].header.title === 'stars') {
-        this.#parsedProducts[index].header.title = 'Stars';
-      }
+    if (key === 'stars') {
+      key = 'Stars';
+    }
 
-      if (this.#parsedProducts[index].header.title === 'reviews') {
-        this.#parsedProducts[index].header.title = 'Reviews';
-      }
+    if (key === 'reviews') {
+      key = 'Reviews';
+    }
 
-      if (this.#parsedProducts[index].header.title === 'info') {
-        this.#parsedProducts[index].header.title = 'Info';
-      }
-    })
-    return this.#parsedProducts;
+    if (key === 'info') {
+      key = 'Info';
+    }
+    return key;
   }
 }
 
