@@ -146,105 +146,106 @@ console.log(getProductsData());
 
 //!2
 
-  let productsInfo = [
-    [{
+let productsInfo = [
+  [{
+    data: 
+      {title: 'Lenovo Legion Y720'},
+    header: 
+      {title: 'Product Name'}
+  },
+  {
+    data: 
+      {title: '$1399.00'},
+    header: 
+      {title: 'Price'}
+  },
+  {
+    data: 
+      {title: '3'},
+    header: 
+      {title: 'Stars'}
+  },
+  {
+    data: 
+      {title: '8 reviews'},
+    header: 
+      {title: 'Reviews'}
+  },
+  {
+    data: 
+      {title: 'Lenovo Legion Y720, 15.6" FHD IPS, Core i7-7700HQ,…, GeForce GTX 1060 6GB, DOS, RGB backlit keyboar'},
+    header: 
+      {title: 'Info'}
+  }], 
+  [{
       data: 
-        {title: 'Lenovo Legion Y720'},
+        {title: 'Asus VivoBook E502NA-GO022T Dark Blue'},
       header: 
         {title: 'Product Name'}
     },
     {
       data: 
-        {title: '$1399.00'},
+        {title: '$399.99'},
       header: 
         {title: 'Price'}
     },
     {
       data: 
-        {title: '3'},
+        {title: '4'},
       header: 
         {title: 'Stars'}
     },
     {
       data: 
-        {title: '8 reviews'},
+        {title: '3 reviews'},
       header: 
         {title: 'Reviews'}
     },
     {
       data: 
-        {title: 'Lenovo Legion Y720, 15.6" FHD IPS, Core i7-7700HQ,…, GeForce GTX 1060 6GB, DOS, RGB backlit keyboar'},
+        {title: 'Asus VivoBook E502NA-GO022T Dark Blue, 15.6" HD, P….1GHz, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd'},
       header: 
         {title: 'Info'}
-    }], 
-    [{
-        data: 
-          {title: 'Asus VivoBook E502NA-GO022T Dark Blue'},
-        header: 
-          {title: 'Product Name'}
-      },
-      {
-        data: 
-          {title: '$399.99'},
-        header: 
-          {title: 'Price'}
-      },
-      {
-        data: 
-          {title: '4'},
-        header: 
-          {title: 'Stars'}
-      },
-      {
-        data: 
-          {title: '3 reviews'},
-        header: 
-          {title: 'Reviews'}
-      },
-      {
-        data: 
-          {title: 'Asus VivoBook E502NA-GO022T Dark Blue, 15.6" HD, P….1GHz, 4GB, 128GB SSD, Windows 10 Home, En/Ru kbd'},
-        header: 
-          {title: 'Info'}
-    }], 
-    [{
-      data: 
-        {title: 'Dell Inspiron 15 (7567) Black'},
-      header: 
-        {title: 'Product Name'}
-    },
-    {
-      data: 
-        {title: '$1098.42'},
-      header: 
-        {title: 'Price'}
-    },
-    {
-      data: 
-        {title: '1'},
-      header: 
-        {title: 'Stars'}
-    },
-    {
-      data: 
-        {title: '7 reviews'},
-      header: 
-        {title: 'Reviews'}
-    },
-    {
-      data: 
-        {title: 'Dell Inspiron 15 (7567) Black, 15.6" FHD, Core i5-… 256GB SSD, GeForce GTX 1050 4GB, Windows 10 Home'},
-      header: 
-        {title: 'Info'}
-    }]
-  ];
+  }], 
+  [{
+    data: 
+      {title: 'Dell Inspiron 15 (7567) Black'},
+    header: 
+      {title: 'Product Name'}
+  },
+  {
+    data: 
+      {title: '$1098.42'},
+    header: 
+      {title: 'Price'}
+  },
+  {
+    data: 
+      {title: '1'},
+    header: 
+      {title: 'Stars'}
+  },
+  {
+    data: 
+      {title: '7 reviews'},
+    header: 
+      {title: 'Reviews'}
+  },
+  {
+    data: 
+      {title: 'Dell Inspiron 15 (7567) Black, 15.6" FHD, Core i5-… 256GB SSD, GeForce GTX 1050 4GB, Windows 10 Home'},
+    header: 
+      {title: 'Info'}
+  }]
+];
+
 function getProductsData() {
   let arr = [];
   productsInfo.forEach(item => {
-    item.map(item => {
-      arr.push(item.data.title)
-    });
+    let header = item.map(item => item.header.title)
+    let result = item.map(item => item.data.title)
+    arr.push(result);
   })
-  console.log(arr); 
+  return arr; 
 }
-getProductsData();
+console.log(getProductsData())
