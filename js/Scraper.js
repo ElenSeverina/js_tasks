@@ -14,7 +14,7 @@
 
 // TODO namimg
 // ScrapperAllInOne -> ProductsAllInOneStrategy
-class ScrapperAllInOne {
+class ProductsAllInOneStrategy {
   #products = [];
 
   #getProductName(item) {
@@ -61,21 +61,17 @@ class ScrapperAllInOne {
         );
       });
 
-    console.log(this.#products);
+    //console.log(this.#products);
   }
 
   getParsed() {
-    // TODO create realization
-
-
-
-    return [
-      ['Product Name','Prize($)', 'Stars', 'Review', 'Info'],
-      ['Asus ASUSPRO B9440UA-GV0279R Gray','1381,13', '1', '4', '14" FHD, Core i7-7500U, 16GB, 512GB SSD, Windows 10 Pro, Eng kbd'],
-    ];
+    let parsedProducts = this.#products.reduce((arr, item) => {
+      arr.push([item.name, item.price, item.stars, item.reviews, item.info])
+      return arr;
+    }, [['Product Name','Price($)', 'Stars', 'Reviews', 'Info']]);
+    return parsedProducts;
   }
 }
-
 
 class Scrapper {
   #scrap // TODO rename correctly -> #strategy
@@ -86,6 +82,10 @@ class Scrapper {
 
   parse() {
     this.#scrap.parse();
+  }
+
+  getParsed() {
+    this.#scrap.getParsed();
   }
 
   createCSV() {
@@ -100,30 +100,29 @@ class Scrapper {
 }
 
 let newScrapper = new Scrapper(
-  new ScrapperAllInOne()
+  new ProductsAllInOneStrategy()
 );
 
 newScrapper.parse();
-// newScrapper.createCSV();
+newScrapper.getParsed();
 
-// console.assert(
-//   newScrapper.createCSV() === "product name\tprice($)\tstars\treviews\tinfo\r\nLenovo ThinkPad T470\t1349.23\t1\t5\tLenovo ThinkPad T470, 14\" FHD IPS, Core i5-7200U, 8GB, 256GB SSD, Windows 10 Pro\r\nLenovo IdeaPad Miix 510 Platinum Silver\t1212.16\t4\t0\tLenovo IdeaPad Miix 510 Platinum Silver, 12.2\" IPS Touch, Core i5-7200U, 8GB, 256GB SSD, 4G, Windows 10 Pro\r\nMSI GL72M 7RDX\t1099.00\t4\t1\tMSI GL72M 7RDX, 17.3\" FHD, Core i5-7300HQ, 8GB, 1TB + 128GB SSD, GeForce GTX 1050 2GB, Windows 10 Home",
-//   'scrap-test',
-// );
+console.assert(
+  newScrapper.createCSV() === "Product Name\tPrice($)\tStars\tReviews\tInfo\r\nAsus ASUSPRO B9440UA-GV0279R Gray\t1381.13\t1\t4\t14\" FHD, Core i7-7500U, 16GB, 512GB SSD, Windows 10 Pro, Eng kbd\r\nThinkPad X240\t1311.99\t3\t12\t12.5\", Core i5-4300U, 8GB, 240GB SSD, Win7 Pro 64bit\r\nLenovo V510 Black\t484.23\t3\t8\t14\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+  'scrap-test',
+);
 
 // [1,2,3].join('\t') -> `1\t2\t3`
 // DRY!!!
 
 
-
 // const mockStructure = [
-//   'Product Name, Prize($), Stars, Review, Info',
+//   'Product Name, Price($), Stars, Review, Info',
 // ];
 // mockStructure[0].join('\t');
 
 
 // const result = [
-//   'Product Name\tPrize($)\tStars\tReviewt\Info'
+//   'Product Name\tPrice($)\tStars\tReviewt\Info'
 // ];
 
 // Mock
