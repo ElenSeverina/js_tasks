@@ -12,8 +12,19 @@
     - person,user data
 */
 
-// TODO namimg
-// ScrapperAllInOne -> ProductsAllInOneStrategy
+const downloadFile = (type, content, name) => {
+  const prefix = type === 'csv'
+    ? 'data:text/csv;charset=utf-8,'
+    : 'data:text/csv;charset=utf-8,';
+
+  const link = document.createElement('a');
+  link.setAttribute('href', encodeURI(`${prefix}${content}`));
+  link.setAttribute('download', name);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 class ProductsAllInOneStrategy {
   #products = [];
 
@@ -60,71 +71,97 @@ class ProductsAllInOneStrategy {
           }),
         );
       });
-
-    //console.log(this.#products);
   }
 
   getParsed() {
-    let parsedProducts = this.#products.reduce((arr, item) => {
-      arr.push([item.name, item.price, item.stars, item.reviews, item.info])
-      return arr;
+    return this.#products.reduce((arr, { name, price, stars, reviews, info }) => {
+      return [
+        ...arr,
+        [name, price, stars, reviews, info],
+      ];
     }, [['Product Name','Price($)', 'Stars', 'Reviews', 'Info']]);
-    return parsedProducts;
   }
 }
 
 class Scrapper {
-  #scrap // TODO rename correctly -> #strategy
+  #strategy
 
   constructor(scrap) {
-    this.#scrap = scrap;
+    this.#strategy = scrap;
   }
 
   parse() {
-    this.#scrap.parse();
+    this.#strategy.parse();
   }
 
   getParsed() {
-    this.#scrap.getParsed();
+    this.#strategy.getParsed();
   }
 
   createCSV() {
-    // TODO add normalizer for csv . -> ,
-    return this.#scrap.getParsed()
-      .map((item) => item.join('\t')).join('\r\n');
-  }
-
-  createXML() {
-
+    return this.#strategy.getParsed()
+      .map((item) => {
+        return item
+          .map((v) => typeof v == 'number' ? String(v).replace('.', ',') : v)
+          .join('\t')
+      }).join('\r\n');
   }
 }
 
-let newScrapper = new Scrapper(
-  new ProductsAllInOneStrategy()
-);
+class StrategyFabric {
+  constructor() {
+    this.#analyze();
+  }
+
+  #analyze() {
+    return document.querySelector('[rel="canonical').getAttribute('href').split('/').slice(-1)[0];
+  }
+
+  create() {
+    if ('allinone') { return new ProductsAllInOneStrategy() }
+    if ('tables-semantically-correct') { return new UsersTablesStrategy() }
+    // new (class {})();
+  }
+}
+
+class UsersTablesStrategy {
+  #users = [];
+
+  #getUsersData() {
+    return Array.from(document.querySelectorAll("tbody>tr"))
+  }
+
+  parse() {
+    this.#getUsersData()
+      .forEach(item => {
+        this.#users.push(
+          item.innerText.split('\t').slice(1)
+        );
+      });
+  }
+  
+  getParsed() {
+    return [['First Name', 'Last Name', 'Username']].concat(this.#users);
+  }
+}
+
+// let newScrapper = new Scrapper(new ProductsAllInOneStrategy());
+let newScrapper = new Scrapper(new UsersTablesStrategy());
+// let newScrapper = new Scrapper(new StrategyFabric().create());
 
 newScrapper.parse();
 newScrapper.getParsed();
+newScrapper.createCSV();
+
+// console.assert(
+//   newScrapper.createCSV() === "Product Name\tPrice($)\tStars\tReviews\tInfo\r\nAsus ASUSPRO B9440UA-GV0279R Gray\t1381,13\t1\t4\t14\" FHD, Core i7-7500U, 16GB, 512GB SSD, Windows 10 Pro, Eng kbd\r\nThinkPad X240\t1311,99\t3\t12\t12.5\", Core i5-4300U, 8GB, 240GB SSD, Win7 Pro 64bit\r\nLenovo V510 Black\t484,23\t3\t8\t14\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+//   'scrap-test',
+// );
 
 console.assert(
-  newScrapper.createCSV() === "Product Name\tPrice($)\tStars\tReviews\tInfo\r\nAsus ASUSPRO B9440UA-GV0279R Gray\t1381.13\t1\t4\t14\" FHD, Core i7-7500U, 16GB, 512GB SSD, Windows 10 Pro, Eng kbd\r\nThinkPad X240\t1311.99\t3\t12\t12.5\", Core i5-4300U, 8GB, 240GB SSD, Win7 Pro 64bit\r\nLenovo V510 Black\t484.23\t3\t8\t14\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
+  newScrapper.createCSV() === "First Name\tLast Name\tUsername\r\nMark\tOtto\t@mdo\r\nJacob\tThornton\t@fat\r\nLarry\tthe Bird\t@twitter\r\nHarry\tPotter\t@hp\r\nJohn\tSnow\t@dunno\r\nTim\tBean\t@timbean",
   'scrap-test',
 );
 
-// [1,2,3].join('\t') -> `1\t2\t3`
-// DRY!!!
-
-
-// const mockStructure = [
-//   'Product Name, Price($), Stars, Review, Info',
-// ];
-// mockStructure[0].join('\t');
-
-
-// const result = [
-//   'Product Name\tPrice($)\tStars\tReviewt\Info'
-// ];
-
-// Mock
-//  !!!
-//  ScrapperAllInOne -> logic parsing -> create structure -> Scrapper get created structure -> create csv from structure -> csv
+// downloadFile('csv', newScrapper.createCSV(), 'all-in-one.csv');
+downloadFile('csv', newScrapper.createCSV(), 'tables-semantically-correct');
