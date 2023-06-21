@@ -128,11 +128,12 @@ class UsersTablesStrategy {
   #users = [];
 
   #getUsersData() {
-    return Array.from(document.querySelectorAll("tbody>tr"))
+    return Array.from(document.querySelectorAll("tr"))
   }
 
   parse() {
     this.#getUsersData()
+      .slice(-3)
       .forEach(item => {
         this.#users.push(
           item.innerText.split('\t').slice(1)
@@ -145,8 +146,30 @@ class UsersTablesStrategy {
   }
 }
 
+class PersonsTablesStrategy {
+  #persons = [];
+
+  #getUsersData() {
+    return Array.from(document.querySelectorAll("tr"))
+  }
+
+  parse() {
+    this.#getUsersData()
+      .slice(-3)
+      .forEach(item => {
+        let i = item.innerText.split('\t').slice(1);
+        this.#persons.push([`${i[0]} ${i[1]}`, `${i[2]}`]);
+      });
+  }
+  
+  getParsed() {
+    return [['Person', 'Userdata']].concat(this.#persons);
+  }
+}
+
 // let newScrapper = new Scrapper(new ProductsAllInOneStrategy());
-let newScrapper = new Scrapper(new UsersTablesStrategy());
+//let newScrapper = new Scrapper(new UsersTablesStrategy());
+let newScrapper = new Scrapper(new PersonsTablesStrategy());
 // let newScrapper = new Scrapper(new StrategyFabric().create());
 
 newScrapper.parse();
@@ -158,8 +181,13 @@ newScrapper.createCSV();
 //   'scrap-test',
 // );
 
+// console.assert(
+//   newScrapper.createCSV() === "First Name\tLast Name\tUsername\r\nMark\tOtto\t@mdo\r\nJacob\tThornton\t@fat\r\nLarry\tthe Bird\t@twitter",
+//   'scrap-test',
+// );
+
 console.assert(
-  newScrapper.createCSV() === "First Name\tLast Name\tUsername\r\nMark\tOtto\t@mdo\r\nJacob\tThornton\t@fat\r\nLarry\tthe Bird\t@twitter\r\nHarry\tPotter\t@hp\r\nJohn\tSnow\t@dunno\r\nTim\tBean\t@timbean",
+  newScrapper.createCSV() === "Person\tUserdata\r\nMark Otto\t@mdo\r\nJacob Thornton\t@fat\r\nLarry the Bird\t@twitter",
   'scrap-test',
 );
 
