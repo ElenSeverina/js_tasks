@@ -1,4 +1,4 @@
-function getNumberFromString(str: string): number | null {
+function getNumberFromString(str: unknown): number | null {
   if (typeof str === 'number') {
     return str;
   }
@@ -7,11 +7,11 @@ function getNumberFromString(str: string): number | null {
     return null;
   }
 
-  const arrOfSymbols: Array<string> = str.split('');
-  const arrOfStrings: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  const alreadyHasADot: boolean = false;
-  let isPreviousSymbolADot: boolean = false;
-  const result: Array<string|number> = [];
+  const arrOfSymbols: string[] = str.split('');
+  const arrOfStrings: string[] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const alreadyHasADot = false;
+  let isPreviousSymbolADot = false;
+  const result: (string|number)[] = [];
 
   for (let i:number = 0; i < arrOfSymbols.length; i++) {
     const symbol: string = arrOfSymbols[i];
