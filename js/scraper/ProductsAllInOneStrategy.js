@@ -12,31 +12,6 @@
     - person,user data
 */
 
-class Scrapper {
-  #strategy
-
-  constructor(scrap) {
-    this.#strategy = scrap;
-  }
-
-  parse() {
-    this.#strategy.parse();
-  }
-
-  getParsed() {
-    this.#strategy.getParsed();
-  }
-
-  createCSV() {
-    return this.#strategy.getParsed()
-      .map((item) => {
-        return item
-          .map((v) => typeof v == 'number' ? String(v).replace('.', ',') : v)
-          .join('\t')
-      }).join('\r\n');
-  }
-}
-
 class ProductsAllInOneStrategy {
   #products = [];
 
@@ -95,36 +70,7 @@ class ProductsAllInOneStrategy {
   }
 }
 
-class StrategyFabric {
-  constructor() {
-    this.#analyze();
-  }
-
-  #analyze() {
-    return document.querySelector('[rel="canonical').getAttribute('href').split('/').slice(-1)[0];
-  }
-
-  create() {
-    if ('allinone') { return new ProductsAllInOneStrategy() }
-    if ('tables-semantically-correct') { return new UsersTablesStrategy() }
-  }
-}
-
-const downloadFile = (type, content, name) => {
-  const prefix = type === 'csv'
-    ? 'data:text/csv;charset=utf-8,'
-    : 'data:text/csv;charset=utf-8,';
-
-  const link = document.createElement('a');
-  link.setAttribute('href', encodeURI(`${prefix}${content}`));
-  link.setAttribute('download', name);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
 let newScrapper = new Scrapper(new ProductsAllInOneStrategy());
-// let newScrapper = new Scrapper(new StrategyFabric().create());
 
 newScrapper.parse();
 newScrapper.getParsed();
@@ -134,5 +80,3 @@ console.assert(
   newScrapper.createCSV() === "Product Name\tPrice($)\tStars\tReviews\tInfo\r\nAsus ASUSPRO B9440UA-GV0279R Gray\t1381,13\t1\t4\t14\" FHD, Core i7-7500U, 16GB, 512GB SSD, Windows 10 Pro, Eng kbd\r\nThinkPad X240\t1311,99\t3\t12\t12.5\", Core i5-4300U, 8GB, 240GB SSD, Win7 Pro 64bit\r\nLenovo V510 Black\t484,23\t3\t8\t14\" HD, Core i3-6006U, 4GB, 128GB SSD, Windows 10 Home",
   'scrap-test',
 );
-
-downloadFile('csv', newScrapper.createCSV(), 'all-in-one.csv');
