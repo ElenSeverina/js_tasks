@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*
     Goal:
     Develop an Iterator. It must have methods: next, reset and property count and current
@@ -13,64 +14,83 @@
     iterator.current;
 */
 
-function Iterator(options = {}) {
+type IteratorOptions = {
+  start: unknown;
+  step: unknown;
+};
+
+type StepFunction = (current: number) => number;
+type Step = number | '+' | '*' | StepFunction;
+
+type IteratorHandler = {
+  step: Step;
+  start: number;
+  count: number;
+  current: number;
+  next: () => IteratorHandler;
+  reset: () => IteratorHandler;
+};
+
+function Iterator(this: IteratorHandler, options?: IteratorOptions) {
+  let step;
+  let start;
 
   this.next = () => {
-    let newStep = this.step;
+    let newStep = step;
     this.count++;
 
-    if (typeof this.step === "function") {
-      newStep = this.step(this.current);
+    if (typeof step === "function") {
+      newStep = step(this.current);
     }
 
-    if (typeof this.step === "number") {
-      newStep = this.current + this.step;
+    if (typeof step === "number") {
+      newStep = this.current + step;
     }
 
-    if (this.step === '+') {
+    if (step === '+') {
       newStep = this.current + this.current || 1;
     }
 
-    if (this.step === '*') {
+    if (step === '*') {
       newStep = this.current === 1
         ? 2
         : this.current * this.current || 2;
     }
 
-    this.current = newStep;
+    this.current = newStep as number;
 
     return this;
   };
 
   this.reset = () => {
     this.count = 0;
-    let { start = 0, step = 1 } = options;
-    this.start = start;
-    this.current = start;
-    this.step = step;
+    let { start = 0, step = 1 } = options || {};
+    start = start as number;
+    this.current = start as number;
+    step = step as number;
 
     if (
       typeof step === 'string'
       && step !== '+'
       && step !== '*'
     ) {
-      this.step = 1;
+      step = 1;
     }
 
     if (
       typeof step === 'number'
-      && (step === 0 
-        || Number.isNaN(step) 
+      && (step === 0
+        || Number.isNaN(step)
         || Math.abs(step) === Infinity)
     ) {
-      this.step = 1;
+      step = 1;
     }
 
     if (
       typeof step === 'object'
       && typeof step !== 'function'
     ) {
-      this.step = 1;
+      step = 1;
     }
 
     if (
