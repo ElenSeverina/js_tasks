@@ -14,3 +14,5 @@ class StrategyFabric {
 }
 
 let strategy = new StrategyFabric();
+
+strategy.create();
