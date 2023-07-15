@@ -8,8 +8,8 @@ class StrategyFabric {
   }
 
   create() {
-    if ('allinone') { return new ProductsAllInOneStrategy() }
-    if ('tables-semantically-correct') { return new UsersTablesStrategy() }
+    if (this.#analyze() === 'allinone') { return new ProductsAllInOneStrategy() }
+    if (this.#analyze() === 'tables-semantically-correct') { return new UsersTablesStrategy() }
   }
 }
 
