@@ -1,15 +1,16 @@
-export const parseJSONSafe = (obj: string, fallback: string): string => {
+export const parseJSONSafe = <T>(obj: string, fallback: T): T => {
   try {
-    return JSON.parse(obj);
+    return JSON.parse(obj) as T;
   } catch (e: any) {
-    return fallback;
+    return fallback as T;
   }
 };
 
+
 type SymbolRegisterOptions = {
-  string: string; 
-  register: string;
-  position: string;
+  string: string;
+  register: 'up' | 'down';
+  position: 'first' | 'end';
 };
 
 export const changeSymbolRegister = (params: SymbolRegisterOptions): string => {
@@ -34,12 +35,23 @@ export const changeSymbolRegister = (params: SymbolRegisterOptions): string => {
     : `${string.slice(0, string.length - 2)}${transform(string[string.length - 1])}`;
 };
 
-document.addEventListener('click', (event: MouseEvent) => {
+
+enum MouseEventType {
+  click = 'click'
+}
+
+document.addEventListener(MouseEventType.click, (event: MouseEvent) => {
   console.log(event.target);
 });
 
 
-const fetchWrapper = (url: string, headers: any, method: string, options: string[]) => {
+
+const fetchWrapper = (
+  url: Parameters<typeof fetch>[0],
+  headers?: HeadersInit,
+  method?: string,
+  options?: string[],
+  ) => {
   return fetch(url, {
     ...options,
     headers,
