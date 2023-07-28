@@ -68,4 +68,5 @@ console.assert(getNumberFromString(false) === null, 11);
 console.assert(getNumberFromString('sadasd.asdas') === null, 12);
 console.assert(getNumberFromString('.') === null, 13);
 
-console.log('test complited');
+//console.log('test complited');
+console.log(typeof getNumberFromString('123'));
