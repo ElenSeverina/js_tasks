@@ -33,6 +33,7 @@ console.log(newArray3);
 // 4. Given an Array [-3,4,9,123].
 //   Return new Array that has incremented every item by 1:
 //   [-3,4,9,123] -> [-2,5,10,124]
+
 const array4 = [-3,4,9,123];
 const newArray4 = array4.map((item) => item + 1);
 console.log(newArray4);
@@ -52,9 +53,10 @@ function generateArrayOfRandomNums() {
 console.log(generateArrayOfRandomNums());
 
 //6. Given an Array for example: [2,3,4,7,8,10].
-  // Return the Array of gaps:
-  // [2,3,4,7,8,10] -> [5,6,9]
-  // [-2,3,4] -> [-1,0,1,2]
+// Return the Array of gaps:
+// [2,3,4,7,8,10] -> [5,6,9]
+// [-2,3,4] -> [-1,0,1,2]
+
 const array6 = [2,3,4,7,8,10];
 
 function findGaps(array) {
@@ -73,6 +75,7 @@ console.log(findGaps(array6));
 
 // 7. Deduplicate given Array [1,4,3,-1,-3,5,1,9,-1,3,100,4]
 // Result: [1,4,3,-1,-3,5,9,100]
+
 const array7 = [1,4,3,-1,-3,5,1,9,-1,3,100,4];
 
 //7.1
@@ -114,6 +117,7 @@ console.log(arrayFromString);
 
 // 10. Given a String "  hello  Young  young developer ".
 // Return an array of unique words ['hello','Young','developer'].
+
 const string10 = "  hello  Young  young developer ";
 
 function filteredWords(str) {
@@ -140,6 +144,7 @@ console.log(strKebabCase);
 // 12. Given an Array [9,[2,5],[3,[4,[6,[7]],8,[1]]]]
 // Return flat Array of Numbers, don't use .flat() method:
 // [9,[2,5],[3,[4,[6,[7]],8,[1]]]] -> [9,2,5,3,4,6,7,8,1]
+
 const arrayOfArrays = [9,[2,5],[3,[4,[6,[7]],8,[1]]]];
 
 function getFlatArray(arr) {
@@ -162,6 +167,7 @@ console.log(getFlatArray(arrayOfArrays));
 
 //     arr1[1].a // 1
 //     arr1[2][0] // 2
+
 const array13 = [3,{a:1},[2],null,NaN,Infinity,undefined];
 
 function deepCopy(item) {
@@ -183,6 +189,7 @@ const array13Copy = structuredClone(array13);
 // 14. Given Arrays [0,1,2,3,4,5] and [6,8,1,-1,8,3]
 //   Return new Array that contains items that present in both arrays:
 //   [0,8,1,2,3,4,5], [6,8,1,-1,8,3] -> [1,3,8]
+
 const array14 = [0,8,1,2,3,4,5];
 const array014 = [6,8,1,-1,8,3];
 
@@ -200,6 +207,7 @@ console.log(getCommonElements(array14, array014));
 
 // 15. Given an Array [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1]
 //   Return index of last number 4 -> 12
+
 const array15 = [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1];
 
 function getLastIndex(arr, target) {
@@ -216,6 +224,7 @@ console.log(getLastIndex(array15, 4));
 // 17. Given an Array [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1]
 // Return new Array with items from givern Array starts from index 4 and has 5 items
 // [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1] -> [8,1,3,6,7]
+
 const array17 = [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1];
 const newArray17 = array17.splice(4, 5);
 console.log(newArray17);
@@ -223,6 +232,7 @@ console.log(newArray17);
 // 18. Given an Array [0,0,0,1,1,1,0,0,0]
 //  Use method .splice() to get two arrays like:
 //  [0,0,0,0,0,0] and [1,1,1]
+
 const array18 = [0,0,0,1,1,1,0,0,0];
 
 const sortedArray = array18.sort((a, b) => a - b);
