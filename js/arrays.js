@@ -2,10 +2,8 @@
 // Insert second Array to the begining of the first
 // [1,2,3,4], [5,6,7,8] -> [5,6,7,8,1,2,3,4]
 
-const array01 = [1, 2, 3, 4];
-const array02 = [5, 6, 7, 8];
-const newArray = array02.concat(array01);
-console.log(newArray);
+const array = [5, 6, 7, 8].concat([1, 2, 3, 4]);
+console.log(array);
 
 // 1. Given Arrays [1,2,3,4,5,6]. Insert value 11 in the middle of the array.
 
@@ -18,31 +16,28 @@ console.log(array1);
 //   - only numbers inside
 //   - only objects inside
 
-const array2 = [1, 2, undefined, 0, NaN, true, BigInt(10), null, -9, Infinity, {}, "-1", ""];
-const newArray02 = array2.filter(
+const filteredArray1 = [1, 2, undefined, 0, NaN, true, BigInt(10), null, -9, Infinity, {}, "-1", ""].filter(
   (item) =>
     (typeof item === "number" && Number.isFinite(item)) ||
     typeof item === "bigint"
 );
-const newArray2 = array2.filter(
+const filteredArray2 = [1, 2, undefined, 0, NaN, true, BigInt(10), null, -9, Infinity, {}, "-1", ""].filter(
   (item) => typeof item === "object" && item !== null
 );
-console.log(newArray02);
-console.log(newArray2);
+console.log(filteredArray1);
+console.log(filteredArray2);
 
 // 3. Given an Array [1,100,201,34,-12,0,3.12]. Return the Sum of its items
 
-const array3 = [1, 100, 201, 34, -12, 0, 3.12];
-const newArray3 = array3.reduce((sum, current) => sum + current, 0);
-console.log(newArray3);
+const array3 = [1, 100, 201, 34, -12, 0, 3.12].reduce((sum, current) => sum + current, 0);
+console.log(array3);
 
 // 4. Given an Array [-3,4,9,123].
 //   Return new Array that has incremented every item by 1:
 //   [-3,4,9,123] -> [-2,5,10,124]
 
-const array4 = [-3, 4, 9, 123];
-const newArray4 = array4.map((item) => item + 1);
-console.log(newArray4);
+const array4 = [-3, 4, 9, 123].map((item) => item + 1);
+console.log(array4);
 
 // 5. Create an Array of 1000 items and fill it with Random Unique Integer values
 
@@ -63,8 +58,6 @@ console.log(generateArrayOfRandomNums());
 // [2,3,4,7,8,10] -> [5,6,9]
 // [-2,3,4] -> [-1,0,1,2]
 
-const array6 = [2, 3, 4, 7, 8, 10];
-
 function findGaps(array) {
   const sortedArray = array.sort((a, b) => a - b);
   let result = [];
@@ -77,12 +70,10 @@ function findGaps(array) {
   return result;
 }
 
-console.log(findGaps(array6));
+console.log(findGaps([2, 3, 4, 7, 8, 10]));
 
 // 7. Deduplicate given Array [1,4,3,-1,-3,5,1,9,-1,3,100,4]
 // Result: [1,4,3,-1,-3,5,9,100]
-
-const array7 = [1, 4, 3, -1, -3, 5, 1, 9, -1, 3, 100, 4];
 
 //7.1
 function getUnicArray(array) {
@@ -96,10 +87,10 @@ function getUnicArray(array) {
   return result;
 }
 
-console.log(getUnicArray(array7));
+console.log(getUnicArray([1, 4, 3, -1, -3, 5, 1, 9, -1, 3, 100, 4]));
 
 //7.2
-const unicArray = Array.from(new Set(array7));
+const unicArray = Array.from(new Set([1, 4, 3, -1, -3, 5, 1, 9, -1, 3, 100, 4]));
 console.log(unicArray);
 
 // 8. Merge two Arrays into one using 3 different variants:
@@ -107,35 +98,36 @@ console.log(unicArray);
 //   - with deduplication [-100,1,2,3,4,5,7,8,9] + [1,3,-1,4,-10,7,6] -> [-100,1,2,3,4,5,7,8,9,-1,-10,6]
 //   - with sorting [-100,1,2,3,4,5,7,8,9] + [1,3,-1,4,-10,7,6] -> [-100,-10,-1,1,2,3,4,5,6,7,8,9]
 
-const array08 = [-100, 1, 2, 3, 4, 5, 7, 8, 9];
-const array8 = [1, 3, -1, 4, -10, 7, 6];
-const newArray8 = array08.concat(array8);
-const unicNewArray8 = Array.from(new Set(array08.concat(array8)));
-const sortedNewArray8 = newArray8.sort((a, b) => a - b);
-console.log(sortedNewArray8);
+const array8 = [-100, 1, 2, 3, 4, 5, 7, 8, 9].concat([
+  1, 3, -1, 4, -10, 7, 6,
+]);
+const unicArray8 = Array.from(
+  new Set([-100, 1, 2, 3, 4, 5, 7, 8, 9].concat([1, 3, -1, 4, -10, 7, 6]))
+);
+const sortedArray8 = [-100, 1, 2, 3, 4, 5, 7, 8, 9]
+  .concat([1, 3, -1, 4, -10, 7, 6])
+  .sort((a, b) => a - b);
+
+console.log(array8);
+console.log(unicArray8);
+console.log(sortedArray8);
 
 // 9. Given a String "hello Young developer".
 // Return an array of words ['hello','Young','developer'].
 
-const string9 = "hello Young developer";
-const arrayFromString = string9.split(" ");
+const arrayFromString = "hello Young developer".split(" ");
 console.log(arrayFromString);
 
 // 10. Given a String "  hello  Young  young developer ".
 // Return an array of unique words ['hello','Young','developer'].
 
-const string10 = "  hello  Young  young developer ";
-
 function filteredWords(str) {
-  const words = str.split(" ");
   const uniqueWords = [];
 
-  words.forEach((word) => {
-    if (
-      !uniqueWords.some(
+  str.split(" ").forEach((word) => {
+    if (!uniqueWords.some(
         (uniqueWord) => uniqueWord.toLowerCase() === word.toLowerCase()
-      ) &&
-      word !== ""
+      ) && word !== ""
     ) {
       uniqueWords.push(word);
     }
@@ -143,13 +135,12 @@ function filteredWords(str) {
   return uniqueWords;
 }
 
-console.log(filteredWords(string10));
+console.log(filteredWords("  hello  Young  young developer "));
 
 // 11. Given a String in camel case "someFunctionName".
 // Return string in kebab case: "someFunctionName" -> "some-function-name"
 
-const strCamelCase = "someFunctionName";
-const strKebabCase = strCamelCase
+const strKebabCase = "someFunctionName"
   .split(/(?=[A-Z])/)
   .join("-")
   .toLowerCase();
@@ -159,8 +150,6 @@ console.log(strKebabCase);
 // Return flat Array of Numbers, don't use .flat() method:
 // [9,[2,5],[3,[4,[6,[7]],8,[1]]]] -> [9,2,5,3,4,6,7,8,1]
 
-const arrayOfArrays = [9, [2, 5], [3, [4, [6, [7]], 8, [1]]]];
-
 function getFlatArray(arr) {
   return arr.reduce((accumulator, current) => {
     return accumulator.concat(
@@ -169,7 +158,7 @@ function getFlatArray(arr) {
   }, []);
 }
 
-console.log(getFlatArray(arrayOfArrays));
+console.log(getFlatArray([9, [2, 5], [3, [4, [6, [7]], 8, [1]]]]));
 
 // 13. Given an Array
 //     const arr1 = [3,{a:1},[2],null,NaN,Infinity,undefined];
@@ -184,32 +173,26 @@ console.log(getFlatArray(arrayOfArrays));
 //     arr1[1].a // 1
 //     arr1[2][0] // 2
 
-const array13 = [3, { a: 1 }, [2], null, NaN, Infinity, undefined];
-
-function deepCopy(item) {
+function getDeepCopy(item) {
   if (typeof item !== "object" || item === null) {
     return item;
   }
 
   return Array.isArray(item)
-    ? item.map(deepCopy)
+    ? item.map(getDeepCopy)
     : Object.fromEntries(
-        Object.entries(item).map(([key, value]) => [key, deepCopy(value)])
+        Object.entries(item).map(([key, value]) => [key, getDeepCopy(value)])
       );
 }
 
-const deepCopyArray = deepCopy(array13);
-console.log(deepCopyArray);
+console.log(getDeepCopy([3, { a: 1 }, [2], null, NaN, Infinity, undefined]));
 
 //! чи можна використовувати?
-const array13Copy = structuredClone(array13);
+const arrayDeepCopy = structuredClone([3, { a: 1 }, [2], null, NaN, Infinity, undefined]);
 
 // 14. Given Arrays [0,1,2,3,4,5] and [6,8,1,-1,8,3]
 //   Return new Array that contains items that present in both arrays:
 //   [0,8,1,2,3,4,5], [6,8,1,-1,8,3] -> [1,3,8]
-
-const array14 = [0, 8, 1, 2, 3, 4, 5];
-const array014 = [6, 8, 1, -1, 8, 3];
 
 function getCommonElements(arr1, arr2) {
   const result = [];
@@ -221,12 +204,10 @@ function getCommonElements(arr1, arr2) {
   return result.sort((a, b) => a - b);
 }
 
-console.log(getCommonElements(array14, array014));
+console.log(getCommonElements([0, 8, 1, 2, 3, 4, 5], [6, 8, 1, -1, 8, 3]));
 
 // 15. Given an Array [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1]
 //   Return index of last number 4 -> 12
-
-const array15 = [0, 4, 6, 7, 8, 1, 3, 6, 7, 9, 1, 2, 4, 5, 1];
 
 function getLastIndex(arr, target) {
   for (let i = arr.length - 1; i >= 0; i--) {
@@ -237,23 +218,20 @@ function getLastIndex(arr, target) {
   return -1;
 }
 
-console.log(getLastIndex(array15, 4));
+console.log(getLastIndex([0, 4, 6, 7, 8, 1, 3, 6, 7, 9, 1, 2, 4, 5, 1], 4));
 
 // 17. Given an Array [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1]
 // Return new Array with items from givern Array starts from index 4 and has 5 items
 // [0,4,6,7,8,1,3,6,7,9,1,2,4,5,1] -> [8,1,3,6,7]
 
-const array17 = [0, 4, 6, 7, 8, 1, 3, 6, 7, 9, 1, 2, 4, 5, 1];
-const newArray17 = array17.splice(4, 5);
-console.log(newArray17);
+const array17 = [0, 4, 6, 7, 8, 1, 3, 6, 7, 9, 1, 2, 4, 5, 1].splice(4, 5);
+console.log(array17);
 
 // 18. Given an Array [0,0,0,1,1,1,0,0,0]
 //  Use method .splice() to get two arrays like:
 //  [0,0,0,0,0,0] and [1,1,1]
 
-const array18 = [0, 0, 0, 1, 1, 1, 0, 0, 0];
-
-const sortedArray = array18.sort((a, b) => a - b);
+const sortedArray = [0, 0, 0, 1, 1, 1, 0, 0, 0].sort((a, b) => a - b);
 const arrayOfZero = sortedArray.slice(0, sortedArray.lastIndexOf(0) + 1);
 const arrayOfOne = sortedArray.slice(sortedArray.lastIndexOf(0) + 1);
 
