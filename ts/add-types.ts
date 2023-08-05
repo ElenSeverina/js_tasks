@@ -6,7 +6,6 @@ export const parseJSONSafe = <T>(obj: string, fallback: T): T => {
   }
 };
 
-
 type SymbolRegisterOptions = {
   string: string;
   register: 'up' | 'down';
@@ -35,7 +34,6 @@ export const changeSymbolRegister = (params: SymbolRegisterOptions): string => {
     : `${string.slice(0, string.length - 2)}${transform(string[string.length - 1])}`;
 };
 
-
 enum MouseEventType {
   click = 'click'
 }
@@ -44,14 +42,12 @@ document.addEventListener(MouseEventType.click, (event: MouseEvent) => {
   console.log(event.target);
 });
 
-
-
 const fetchWrapper = (
   url: Parameters<typeof fetch>[0],
-  headers?: HeadersInit,
-  method?: string,
-  options?: string[],
-  ) => {
+  headers?: Parameters<typeof fetch>[1]['headers'],
+  method?: Parameters<typeof fetch>[1]['method'],
+  options?: Parameters<typeof fetch>[1],
+) => {
   return fetch(url, {
     ...options,
     headers,

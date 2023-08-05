@@ -1,7 +1,18 @@
-class Scrapper {
-  #strategy: ProductsAllInOneStrategy | UsersTablesStrategy | PersonsTablesStrategy;
+type GetNumberFromString = (str: string) => number | null;
 
-  constructor(scrap: ProductsAllInOneStrategy | UsersTablesStrategy | PersonsTablesStrategy) {
+interface IStrategy {
+  parse(): void;
+  getParsed(): (string | number)[][];
+}
+
+interface IScrapper extends IStrategy {
+  createCSV(): string;
+}
+
+class Scrapper implements IScrapper {
+  #strategy: IStrategy;
+
+  constructor(scrap: IStrategy) {
     this.#strategy = scrap;
   }
 
@@ -9,13 +20,13 @@ class Scrapper {
     this.#strategy.parse();
   }
 
-  getParsed(): (string | number)[] {
+  getParsed(): (string | number)[][] {
     return this.#strategy.getParsed();
   }
 
   createCSV(): string {
     return this.#strategy.getParsed()
-      .map((item: (string | number)[]) => {
+      .map((item) => {
         return item
           .map((v) => typeof v === 'number' ? String(v).replace('.', ',') : v)
           .join('\t');
@@ -33,7 +44,7 @@ interface ProductData {
 
 type NumberFromString = (value: string) => number | null;
 
-class ProductsAllInOneStrategy {
+class ProductsAllInOneStrategy implements IStrategy {
   #products: ProductData[] = [];
 
   #getProductName(item: HTMLElement): string {
@@ -56,11 +67,13 @@ class ProductsAllInOneStrategy {
     return (item.querySelector(".description") as HTMLElement)?.innerText;
   }
 
-  #normalizeData({ name, price, stars, reviews, info }: ProductData): ProductData {
+  #normalizeData({ name, price, stars, reviews, info }: Record<string, string>): ProductData {
     return {
       name,
+      // @ts-ignore
       price: getNumberFromString(price),
       stars,
+      // @ts-ignore
       reviews: getNumberFromString(reviews),
       info: info.replace(name, '').split(', ').filter(Boolean).join(', '),
     };
@@ -92,7 +105,7 @@ class ProductsAllInOneStrategy {
   }
 }
 
-class UsersTablesStrategy {
+class UsersTablesStrategy implements IStrategy {
   #users: string[][] = [];
 
   #getUsersData(): HTMLElement[] {
@@ -108,13 +121,13 @@ class UsersTablesStrategy {
         );
       });
   }
-  
-  getParsed(): (string | string[])[] {
+
+  getParsed(): (string)[][] {
     return [['First Name', 'Last Name', 'Username']].concat(this.#users);
   }
 }
 
-class PersonsTablesStrategy {
+class PersonsTablesStrategy implements IStrategy {
   #persons: string[][] = [];
 
   #getUsersData(): HTMLElement[] {
@@ -129,14 +142,17 @@ class PersonsTablesStrategy {
         this.#persons.push([`${i[0]} ${i[1]}`, `${i[2]}`]);
       });
   }
-  
-  getParsed(): (string | string[])[] {
+
+  getParsed(): string[][] {
     return [['Person', 'Userdata']].concat(this.#persons);
   }
 }
 
+interface IStrategyFabric {
+  create(): IStrategy | undefined;
+}
 
-class StrategyFabric {
+class StrategyFabric implements IStrategyFabric {
   constructor() {
     this.#analyze();
   }
@@ -145,7 +161,7 @@ class StrategyFabric {
     return document.querySelector('[rel="canonical"')!.getAttribute('href')!.split('/').slice(-1)[0];
   }
 
-  create(): ProductsAllInOneStrategy | UsersTablesStrategy | undefined {
+  create() {
     if (this.#analyze() === 'allinone') { return new ProductsAllInOneStrategy(); }
     if (this.#analyze() === 'tables-semantically-correct') { return new UsersTablesStrategy(); }
     return undefined;
@@ -169,15 +185,11 @@ const downloadFile = (type: FileType, content: FileContent, name: FileName): voi
   document.body.removeChild(link);
 };
 
-type ScrapperStrategy = ProductsAllInOneStrategy | UsersTablesStrategy;
+const newScrapper = new Scrapper(
+  new StrategyFabric().create(),
+)
 
-let strategy = new StrategyFabric();
-
-let newScrapper: ScrapperStrategy | undefined = strategy.create();
-
-if (newScrapper) {
-  newScrapper.parse();
-  newScrapper.getParsed();
-  console.log(newScrapper.createCSV());
-  downloadFile('csv', newScrapper.createCSV(), 'data_from_tables.csv');
-}
+newScrapper.parse();
+newScrapper.getParsed();
+console.log(newScrapper.createCSV());
+downloadFile('csv', newScrapper.createCSV(), 'data_from_tables.csv');
