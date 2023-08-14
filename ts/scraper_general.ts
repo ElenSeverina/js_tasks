@@ -193,3 +193,5 @@ newScrapper.parse();
 newScrapper.getParsed();
 console.log(newScrapper.createCSV());
 downloadFile('csv', newScrapper.createCSV(), 'data_from_tables.csv');
+
+
