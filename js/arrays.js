@@ -113,12 +113,6 @@ console.log(9, arrayFromString);
 // 10. Given a String "  hello  Young  young developer ".
 // Return an array of unique words ['hello','Young','developer'].
 
-// item, item.toLowerCase(), cache.includes(item) -> cache.add(item.toLowerCase()) result.push(item)
-// 1 hello , hello, {}, [] ->  {hello} [hello]
-// 2 Young, young, {hello}, [hello] -> {hello, young} [hello, Young]
-// 3 young, young, {hello, young} [hello, Young] -> {hello, young} [hello, Young]
-// 4 developer, developer, {hello, young} [hello, Young], -> {hello, young, developer} [hello, Young, developer]
-
 function filteredWords(str) {
   const uniqueWords = [];
   const uniqueWordsSet = new Set();
@@ -133,7 +127,6 @@ function filteredWords(str) {
 }
 
 console.log(filteredWords("  hello  Young  young developer "));
-
 
 // 11. Given a String in camel case "someFunctionName".
 // Return string in kebab case: "someFunctionName" -> "some-function-name"
