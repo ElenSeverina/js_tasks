@@ -27,8 +27,7 @@ console.log(2.2, filteredArray2);
 
 // 3. Given an Array [1,100,201,34,-12,0,3.12]. Return the Sum of its items
 
-const array3 = [1, 100, 201, 34, -12, 0, 3.12]
-  .reduce((sum, current) => sum + current, 0);
+const array3 = [1, 100, 201, 34, -12, 0, 3.12].reduce((sum, current) => sum + current, 0);
 console.log(3, array3);
 
 // 4. Given an Array [-3,4,9,123].
@@ -42,11 +41,9 @@ console.log(4, array4);
 
 new Array(1000)
   .fill("")
-  .map((v, i) => Number(String(Math.floor(Math.random() * 1000) + 1) + i));
+  .map(i => Number(String(Math.floor(Math.random() * 1000) + 1) + i));
 
-[...new Array(1000)].map((v, i) =>
-  Number(String(Math.floor(Math.random() * 1000) + 1) + i)
-);
+[...new Array(1000)].map(i => Number(String(Math.floor(Math.random() * 1000) + 1) + i));
 
 const arr5 = new Array(1000);
 for (let i = 0; i < 1000; i++) {
@@ -59,21 +56,18 @@ console.log(5, arr5);
 // [2,3,4,7,8,10] -> [5,6,9]
 // [-2,3,4] -> [-1,0,1,2]
 
-console.log(
-  6, [2, 3, 4, 7, 8, 10].reduce((res, currentNumber, index, arr) => {
-    const previousNumber = arr[index - 1];
-    if (index > 0 && currentNumber - 1 !== previousNumber) {
-      for (
-        let gapNumber = previousNumber + 1;
+const newArray6 = [2, 3, 4, 7, 8, 10].reduce((res, currentNumber, index, arr) => {
+  const previousNumber = arr[index - 1];
+  if (index > 0 && currentNumber - 1 !== previousNumber) {
+    for (let gapNumber = previousNumber + 1;
         gapNumber < currentNumber;
-        gapNumber++
-      ) {
-        res.push(gapNumber);
-      }
-    }
-    return res;
-  }, [])
-);
+        gapNumber++) {
+          res.push(gapNumber);
+        }
+  }
+  return res;
+}, [])
+console.log(6, newArray6);
 
 // 7. Deduplicate given Array [1,4,3,-1,-3,5,1,9,-1,3,100,4]
 // Result: [1,4,3,-1,-3,5,9,100]
@@ -93,11 +87,9 @@ const unicArray8 = Array.from(
 );
 
 const sortedUnicArray8 = Array.from(
-  new Set(
-    [-100, 1, 2, 3, 4, 5, 7, 8, 9]
-      .concat([1, 3, -1, 4, -10, 7, 6])
-      .sort((a, b) => a - b)
-  )
+  new Set([-100, 1, 2, 3, 4, 5, 7, 8, 9]
+    .concat([1, 3, -1, 4, -10, 7, 6])
+    .sort((a, b) => a - b))
 );
 
 console.log(8.1, array8);
@@ -163,43 +155,14 @@ console.log(12, [9, [2, 5], [3, [4, [6, [7]], 8, [1]]]].toString().split(","));
 //     arr1[1].a // 1
 //     arr1[2][0] // 2
 
-function getDeepCopy(item) {
-  if (typeof item !== "object" || item === null) {
-    return item;
-  }
-
-  return Array.isArray(item)
-    ? item.map(getDeepCopy)
-    : Object.fromEntries(
-        Object.entries(item).map(([key, value]) => [key, getDeepCopy(value)])
-      );
-}
+const deepCopy = (arr) => JSON.parse(JSON.stringify(arr));
 
 const arr131 = [3, { a: 1 }, [2], null, NaN, Infinity, undefined];
-const arr132 = getDeepCopy(arr131);
+const arr132 = deepCopy(arr131);
 arr132[1].a = 2;
 arr132[2][0] = 3;
 
-console.log(
-  13,
-  arr132[1].a === 2,
-  arr132[2][0] === 3,
-  arr131[1].a === 1,
-  arr131[2][0] === 2
-);
-
-const arr133 = [3, { a: 1 }, [2], null, NaN, Infinity, undefined];
-const arr134 = structuredClone(arr131);
-arr134[1].a = 2;
-arr134[2][0] = 3;
-
-console.log(
-  13,
-  arr134[1].a === 2,
-  arr134[2][0] === 3,
-  arr133[1].a === 1,
-  arr133[2][0] === 2
-);
+console.log(13, arr132[1].a === 2, arr132[2][0] === 3, arr131[1].a === 1, arr131[2][0] === 2);
 
 const arrayDeepCopy = structuredClone(13, [3, { a: 1 }, [2], null, NaN, Infinity, undefined,]);
 
@@ -233,9 +196,7 @@ const startIndex = arr171.findIndex((v) => v === 1);
 const endIndex = arr171.lastIndexOf(1);
 const arr172 = arr171.splice(startIndex, endIndex - startIndex + 1);
 
-const [arr173, arr174] = [
-  0, 0, 2, 3, 4, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0,
-].reduce((res, number) => {
+const [arr173, arr174] = [0, 0, 2, 3, 4, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0,].reduce((res, number) => {
   if (!res[number]) {
     res[number] = [];
   }
